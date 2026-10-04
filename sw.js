@@ -1,6 +1,6 @@
 // Fit & Leicht – Service Worker für den Offline-Modus.
 // Bei Änderungen an den Dateien VERSION erhöhen, damit Handys die neue Version laden.
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = 'fit-leicht-' + VERSION;
 const APP_FILES = [
   './',
@@ -10,11 +10,20 @@ const APP_FILES = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/maskable-512.png',
-  './icons/apple-touch-icon.png'
+  './icons/apple-touch-icon.png',
+  './fonts/barlow-400.woff2',
+  './fonts/barlow-600.woff2',
+  './fonts/barlow-700.woff2',
+  './fonts/barlow-condensed-700.woff2'
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(APP_FILES)).then(() => self.skipWaiting()));
+  // cache: 'reload' umgeht den HTTP-Cache, damit wirklich die neue Version gespeichert wird
+  event.waitUntil(
+    caches.open(CACHE)
+      .then((cache) => cache.addAll(APP_FILES.map((url) => new Request(url, { cache: 'reload' }))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', (event) => {
@@ -30,17 +39,15 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  const sameOrigin = url.origin === self.location.origin;
-  const isFont = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
-  if (!sameOrigin && !isFont) return;
+  if (url.origin !== self.location.origin) return;
 
   event.respondWith(
     caches.open(CACHE).then(async (cache) => {
-      const key = req.mode === 'navigate' && sameOrigin && url.pathname.endsWith('/') ? './index.html' : req;
+      const key = req.mode === 'navigate' && url.pathname.endsWith('/') ? './index.html' : req;
       const cached = await cache.match(key, { ignoreSearch: true });
       const network = fetch(req)
         .then((res) => {
-          if (res && (res.ok || res.type === 'opaque')) cache.put(key, res.clone());
+          if (res && res.ok) cache.put(key, res.clone());
           return res;
         })
         .catch(() => undefined);

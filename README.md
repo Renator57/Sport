@@ -1,7 +1,7 @@
 # Fit & Leicht
 
 App zum Abnehmen mit Sport: Kalorienrechner, Gewichtsverlauf, Trainings- und
-Ernährungstagebuch, Wochenpläne und Erinnerungen. Sie lässt sich aufs Handy
+Ernährungstagebuch, Intervall-Timer, Schritte, Erfolge, Wochenpläne und Erinnerungen. Sie lässt sich aufs Handy
 installieren und läuft danach **auch offline**.
 
 Die ausführliche Anleitung steht in **[README.html](README.html)**
@@ -20,5 +20,6 @@ Die ausführliche Anleitung steht in **[README.html](README.html)**
 | `manifest.webmanifest` | Daten für die Installation |
 | `sw.js` | Offline-Modus (bei Änderungen `VERSION` erhöhen) |
 | `icons/` | App-Icons |
+| `fonts/` | Schrift Barlow, lokal gespeichert (SIL Open Font License) |
 
 Die Daten bleiben nur auf dem Gerät. Ab und zu unter *Profil* ein Backup herunterladen.

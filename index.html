@@ -13,10 +13,12 @@
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Fit &amp; Leicht</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap">
+<link rel="preload" href="fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+  @font-face { font-family: "Barlow"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonts/barlow-400.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: "Barlow"; font-style: normal; font-weight: 600; font-display: swap; src: url("fonts/barlow-600.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: "Barlow"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/barlow-700.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: "Barlow Condensed"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/barlow-condensed-700.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
   :root {
     color-scheme: light;
     --bg: #f4f6f5;
@@ -119,7 +121,7 @@
   .stat .value { font: 700 1.75rem/1.15 var(--font-display); font-variant-numeric: tabular-nums; }
   .stat .label { text-transform: uppercase; letter-spacing: .05em; font-size: .72rem; font-weight: 600; }
   .stat .sub { font-size: .8rem; color: var(--muted); }
-  form .row { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-bottom: 10px; }
+  .row { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-bottom: 10px; }
   label { display: block; font-size: .85rem; color: var(--muted); margin-bottom: 4px; }
   input, select {
     width: 100%;
@@ -232,6 +234,44 @@
   }
   .toast .grow { flex: 1; min-width: 0; }
   .toast button { background: transparent; color: var(--bg); min-height: 36px; padding: 6px 8px; }
+  .toast #toast-action { border: 1px solid currentColor; padding: 6px 12px; white-space: nowrap; }
+  .daynav {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px;
+  }
+  .daynav .grow { flex: 1; text-align: center; min-width: 0; }
+  .daynav button { min-width: 48px; font-size: 1.4rem; line-height: 1; padding: 6px 12px; }
+  .daynav button:disabled { opacity: .35; cursor: default; }
+  .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-top: 6px; }
+  .lg-dot { width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--accent); display: inline-block; }
+  .lg-line { width: 18px; height: 3px; background: var(--accent); border-radius: 2px; display: inline-block; margin-left: 8px; }
+  .lg-goal { width: 18px; height: 0; border-top: 2px dashed var(--blue); display: inline-block; margin-left: 8px; }
+  .stack { display: grid; gap: 10px; }
+  .tm-custom { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
+  .inline-form { display: flex; gap: 10px; align-items: flex-end; }
+  .inline-form .grow { flex: 1; min-width: 0; }
+  .timer {
+    margin: 14px 0; padding: 18px 12px; border-radius: 14px; text-align: center;
+    background: var(--bg); display: grid; gap: 4px;
+  }
+  .timer[data-phase="work"] { background: var(--accent); color: var(--accent-text); }
+  .timer[data-phase="rest"] { background: var(--blue-soft); color: var(--blue); }
+  .timer[data-phase="prep"] { background: var(--warn-soft); color: var(--warn); }
+  .timer[data-phase="done"] { background: var(--accent-soft); color: var(--accent); }
+  .tm-phase { font: 700 1.2rem/1 var(--font-display); text-transform: uppercase; letter-spacing: .08em; }
+  .tm-time { font: 700 clamp(4rem, 22vw, 7rem)/1 var(--font-display); font-variant-numeric: tabular-nums; }
+  .tm-round { font-weight: 600; opacity: .85; }
+  .timer .bar { margin-top: 8px; background: rgba(127,127,127,.2); }
+  .timer[data-phase="work"] .bar > div { background: var(--accent-text); }
+  .badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+  .badge {
+    display: flex; gap: 8px; align-items: center; padding: 10px; border-radius: 12px;
+    background: var(--bg); color: var(--muted); font-size: .85rem; line-height: 1.25; min-width: 0;
+  }
+  .badge .ico { font-size: 1.4rem; filter: grayscale(1); opacity: .4; flex: none; }
+  .badge.got { background: var(--accent-soft); color: var(--text); }
+  .badge.got .ico { filter: none; opacity: 1; }
+  .badge strong { display: block; }
   .seg { display: flex; gap: 6px; flex-wrap: wrap; }
   .seg button { flex: 1; min-width: 0; padding: 10px 8px; }
   .seg button.secondary.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
@@ -320,6 +360,12 @@
       <p class="muted" id="h-goal-text"></p>
     </div>
 
+    <div class="card" id="badge-card" hidden>
+      <h2>Erfolge</h2>
+      <p class="muted" id="badge-count"></p>
+      <div class="badges" id="badges"></div>
+    </div>
+
     <div class="card">
       <h2>Tipp des Tages</h2>
       <div class="tip" id="h-tip"></div>
@@ -340,15 +386,20 @@
             <label for="w-value">Gewicht (kg)</label>
             <input type="number" id="w-value" step="0.1" min="30" max="300" inputmode="decimal" required>
           </div>
+          <div>
+            <label for="w-waist">Bauchumfang (cm, optional)</label>
+            <input type="number" id="w-waist" step="0.5" min="40" max="250" inputmode="decimal">
+          </div>
         </div>
         <button type="submit">Speichern</button>
       </form>
-      <p class="muted">Tipp: Wiege dich immer zur gleichen Zeit – am besten morgens nach dem Aufstehen.</p>
+      <p class="muted">Tipp: Wiege dich immer zur gleichen Zeit, am besten morgens nach dem Aufstehen. Den Bauchumfang misst du in Höhe des Bauchnabels, locker ausgeatmet, etwa einmal pro Woche.</p>
     </div>
 
     <div class="card">
       <h2>Verlauf</h2>
       <div class="chart-wrap" id="weight-chart"></div>
+      <p class="muted legend" id="chart-legend" hidden><span class="lg-dot"></span> Messung <span class="lg-line"></span> Trend (7-Tage-Schnitt) <span class="lg-goal"></span> Ziel</p>
       <div class="grid" style="margin-top:12px">
         <div class="stat">
           <div class="label">BMI</div>
@@ -358,7 +409,12 @@
         <div class="stat">
           <div class="label">Tempo (letzte 4 Wochen)</div>
           <div class="value" id="w-rate">–</div>
-          <div class="sub">kg pro Woche</div>
+          <div class="sub" id="w-rate-sub">kg pro Woche</div>
+        </div>
+        <div class="stat">
+          <div class="label">Bauchumfang</div>
+          <div class="value" id="w-waist-val">–</div>
+          <div class="sub" id="w-whtr"></div>
         </div>
       </div>
     </div>
@@ -366,11 +422,58 @@
     <div class="card">
       <h2>Einträge</h2>
       <ul class="list" id="weight-list"></ul>
+      <button type="button" class="secondary" id="weight-more" hidden style="margin-top:10px;width:100%">Alle anzeigen</button>
     </div>
   </section>
 
   <!-- ============ TRAINING ============ -->
   <section class="tab" id="tab-train">
+    <div class="card">
+      <h2>Schritte heute</h2>
+      <form id="steps-form" class="inline-form">
+        <div class="grow">
+          <label for="s-value">Schritte laut Handy oder Uhr</label>
+          <input type="number" id="s-value" min="0" max="100000" inputmode="numeric" placeholder="z. B. 6500" required>
+        </div>
+        <button type="submit">Speichern</button>
+      </form>
+      <div class="bar" style="margin-top:12px"><div id="s-bar" style="width:0"></div></div>
+      <p class="muted" id="s-text"></p>
+    </div>
+
+    <div class="card" id="timer-card">
+      <h2>Intervall-Timer</h2>
+      <div class="stack">
+        <div>
+          <label for="tm-preset">Vorlage</label>
+          <select id="tm-preset">
+            <option value="40,20,10">HIIT · 40 s / 20 s × 10</option>
+            <option value="20,10,8">Tabata · 20 s / 10 s × 8</option>
+            <option value="45,15,4">Plank · 45 s / 15 s × 4</option>
+            <option value="30,30,12">Einsteiger · 30 s / 30 s × 12</option>
+            <option value="60,30,8">Zirkel · 60 s / 30 s × 8</option>
+            <option value="custom">Eigene Werte</option>
+          </select>
+        </div>
+        <div class="row tm-custom">
+          <div><label for="tm-work">Belastung (s)</label><input type="number" id="tm-work" min="5" max="600" inputmode="numeric"></div>
+          <div><label for="tm-rest">Pause (s)</label><input type="number" id="tm-rest" min="0" max="600" inputmode="numeric"></div>
+          <div><label for="tm-rounds">Runden</label><input type="number" id="tm-rounds" min="1" max="50" inputmode="numeric"></div>
+        </div>
+      </div>
+      <div class="timer" id="tm-display" data-phase="idle">
+        <div class="tm-phase" id="tm-phase">Bereit</div>
+        <div class="tm-time" id="tm-time">0:40</div>
+        <div class="tm-round" id="tm-round">10 Runden · 10 Min. gesamt</div>
+        <div class="bar"><div id="tm-bar" style="width:0"></div></div>
+      </div>
+      <div class="actions">
+        <button type="button" id="tm-start">Start</button>
+        <button type="button" class="secondary" id="tm-stop" disabled>Stopp</button>
+      </div>
+      <p class="muted">Mit Signalton und Vibration. Der Bildschirm bleibt während des Timers an.</p>
+    </div>
+
     <div class="card">
       <h2>Training eintragen</h2>
       <form id="workout-form">
@@ -428,13 +531,20 @@
 
   <!-- ============ ERNÄHRUNG ============ -->
   <section class="tab" id="tab-food">
+    <div class="daynav" role="group" aria-label="Tag auswählen">
+      <button type="button" class="secondary" id="fd-prev" aria-label="Vorheriger Tag">‹</button>
+      <div class="grow"><strong id="fd-label">Heute</strong><div class="muted" id="fd-date"></div></div>
+      <button type="button" class="secondary" id="fd-next" aria-label="Nächster Tag">›</button>
+    </div>
+
     <div class="card">
       <h2>Mahlzeit eintragen</h2>
       <form id="food-form">
         <div class="row">
           <div>
             <label for="f-name">Was hast du gegessen?</label>
-            <input type="text" id="f-name" maxlength="60" placeholder="z. B. Haferflocken mit Beeren" required>
+            <input type="text" id="f-name" maxlength="60" placeholder="z. B. Haferflocken mit Beeren" list="food-names" autocomplete="off" required>
+            <datalist id="food-names"></datalist>
           </div>
           <div>
             <label for="f-kcal">Kalorien (kcal)</label>
@@ -458,6 +568,10 @@
         </div>
         <button type="submit">Hinzufügen</button>
       </form>
+      <div id="recent-wrap" hidden>
+        <h3>Deine Favoriten</h3>
+        <div class="actions" id="recent-foods"></div>
+      </div>
       <h3>Schnell hinzufügen</h3>
       <div class="actions" id="quick-foods"></div>
     </div>
@@ -470,7 +584,7 @@
     </div>
 
     <div class="card">
-      <h2>Heute gegessen</h2>
+      <h2 id="f-day-title">Heute gegessen</h2>
       <div class="grid" style="margin-bottom:10px">
         <div class="stat">
           <div class="label">Kalorien</div>
@@ -690,6 +804,7 @@
 
 <div class="toast" id="toast" role="status" hidden>
   <div class="grow"><strong id="toast-title"></strong><div id="toast-body"></div></div>
+  <button type="button" id="toast-action" hidden></button>
   <button type="button" id="toast-close" aria-label="Schließen">✕</button>
 </div>
 
@@ -782,7 +897,15 @@
     ['Langsam essen', 'Das Sättigungsgefühl kommt erst nach etwa 20 Minuten.'],
     ['Krafttraining nicht vergessen', 'Muskeln verbrauchen auch in Ruhe Energie.'],
     ['Kleine Ziele setzen', 'Feiere jedes verlorene Kilo – nicht nur das Endziel.'],
-    ['Kein Alles-oder-nichts', 'Ein Ausrutscher ist kein Grund aufzugeben. Die nächste Mahlzeit zählt.']
+    ['Kein Alles-oder-nichts', 'Ein Ausrutscher ist kein Grund aufzugeben. Die nächste Mahlzeit zählt.'],
+    ['Miss auch den Bauch', 'Wenn du Muskeln aufbaust, bleibt die Waage manchmal stehen, aber der Bauchumfang sinkt trotzdem.'],
+    ['Steigere dich langsam', 'Jede Woche ein bisschen mehr: eine Wiederholung, eine Runde oder fünf Minuten länger.'],
+    ['Plateau? Keine Panik', 'Stillstand für 1–2 Wochen ist normal. Prüfe ehrlich deine Kalorien und bleib dran.'],
+    ['Nach dem Essen gehen', 'Schon 10 Minuten Spazieren nach dem Essen helfen deinem Blutzucker.'],
+    ['Wiegen statt schätzen', 'Eine Küchenwaage zeigt, wie viel du wirklich isst. Öl und Nüsse werden oft unterschätzt.'],
+    ['Erholung einplanen', 'Muskeln wachsen in der Pause. Mindestens ein Ruhetag pro Woche gehört dazu.'],
+    ['Stress senken', 'Viel Stress fördert Heißhunger. Ein Spaziergang oder Atemübungen helfen.'],
+    ['Gemüse vorbereiten', 'Geschnittenes Gemüse im Kühlschrank ist der beste Snack gegen Heißhunger.']
   ];
 
   // ---------- Hilfsfunktionen ----------
@@ -824,7 +947,8 @@
     food: { on: true, time: '20:30' },
     notified: { date: '', keys: [] }
   });
-  const emptyState = () => ({ profile: null, weights: [], workouts: [], foods: [], water: {}, plan: { level: 'beginner', done: {} }, reminders: defaultReminders() });
+  const emptyState = () => ({ profile: null, weights: [], workouts: [], foods: [], water: {}, steps: {}, badges: [], plan: { level: 'beginner', done: {} }, reminders: defaultReminders() });
+  const STEP_GOAL = 8000;
   let state = emptyState();
   let loaded = false;
 
@@ -844,6 +968,7 @@
     const cut = dateKey(d);
     state.foods = state.foods.filter((f) => f.date >= cut);
     Object.keys(state.water).forEach((k) => { if (k < cut) delete state.water[k]; });
+    Object.keys(state.steps).forEach((k) => { if (k < cut) delete state.steps[k]; });
     Object.keys(state.plan.done).forEach((k) => { if (k < cut) delete state.plan.done[k]; });
   }
 
@@ -918,15 +1043,36 @@
     return n;
   }
 
-  function weeklyRate() {
+  // Trend: Durchschnitt aller Messungen der letzten 7 Tage – glättet Wasser-Schwankungen
+  function weightTrend() {
     const ws = [...state.weights].sort((a, b) => a.date.localeCompare(b.date));
-    if (ws.length < 2) return null;
-    const last = ws.at(-1);
-    const cutoff = parseKey(last.date); cutoff.setDate(cutoff.getDate() - 28);
-    const first = ws.find((w) => parseKey(w.date) >= cutoff) || ws[0];
-    const days = (parseKey(last.date) - parseKey(first.date)) / 864e5;
-    if (days < 1) return null;
-    return (last.kg - first.kg) / days * 7;
+    return ws.map((w, i) => {
+      const from = parseKey(w.date); from.setDate(from.getDate() - 6);
+      const fromKey = dateKey(from);
+      const win = ws.slice(0, i + 1).filter((x) => x.date >= fromKey);
+      return { date: w.date, kg: w.kg, trend: win.reduce((s, x) => s + x.kg, 0) / win.length };
+    });
+  }
+
+  // kg pro Woche, berechnet aus dem Trend der letzten 4 Wochen (Steigung per linearer Regression)
+  function weeklyRate() {
+    const tr = weightTrend();
+    if (tr.length < 2) return null;
+    const last = parseKey(tr.at(-1).date);
+    const cutoff = new Date(last); cutoff.setDate(cutoff.getDate() - 28);
+    const pts = tr.filter((t) => parseKey(t.date) >= cutoff).map((t) => [(parseKey(t.date) - last) / 864e5, t.trend]);
+    if (pts.length < 2) return null;
+    const n = pts.length;
+    const mx = pts.reduce((s, p) => s + p[0], 0) / n;
+    const my = pts.reduce((s, p) => s + p[1], 0) / n;
+    const sxx = pts.reduce((s, p) => s + (p[0] - mx) ** 2, 0);
+    if (sxx < 1) return null;
+    const sxy = pts.reduce((s, p) => s + (p[0] - mx) * (p[1] - my), 0);
+    return sxy / sxx * 7;
+  }
+
+  function latestWaist() {
+    return [...state.weights].filter((w) => w.waist).sort((a, b) => a.date.localeCompare(b.date)).at(-1) || null;
   }
 
   // ---------- Rendering ----------
@@ -937,6 +1083,8 @@
     renderFood();
     renderPlan();
     renderTodo();
+    renderSteps();
+    renderBadges();
     renderReminders();
     renderProfile();
   }
@@ -1009,19 +1157,26 @@
     $('h-tip').replaceChildren(el('strong', { text: tip[0] }), document.createTextNode(tip[1]));
   }
 
+  let showAllWeights = false;
   function renderWeight() {
     const list = $('weight-list');
     const ws = [...state.weights].sort((a, b) => b.date.localeCompare(a.date));
     list.replaceChildren();
     if (!ws.length) list.appendChild(el('li', { class: 'empty', text: 'Noch keine Einträge.' }));
+    $('weight-more').hidden = ws.length <= 10;
+    $('weight-more').textContent = showAllWeights ? 'Weniger anzeigen' : 'Alle ' + ws.length + ' Einträge anzeigen';
     ws.forEach((w, i) => {
+      if (!showAllWeights && i >= 10) return;
       const prev = ws[i + 1];
       const diff = prev ? w.kg - prev.kg : null;
       list.appendChild(el('li', null, [
-        el('div', { class: 'grow' }, [el('div', { class: 'title', text: fmtDate(w.date) })]),
+        el('div', { class: 'grow' }, [
+          el('div', { class: 'title', text: fmtDate(w.date) }),
+          w.waist ? el('div', { class: 'muted', text: 'Bauch ' + fmt(w.waist, 1) + ' cm' }) : null
+        ]),
         diff !== null ? el('span', { class: 'pill ' + (diff > 0 ? 'warn' : ''), text: (diff > 0 ? '+' : diff < 0 ? '−' : '±') + fmt(Math.abs(diff), 1) }) : null,
         el('span', { class: 'num', text: fmt(w.kg, 1) + ' kg' }),
-        el('button', { class: 'icon', 'aria-label': 'Löschen', text: '✕', onclick: () => { state.weights = state.weights.filter((x) => x.id !== w.id); save(); } })
+        el('button', { class: 'icon', 'aria-label': 'Löschen', text: '✕', onclick: () => removeWithUndo('weights', w, 'Gewicht vom ' + fmtDate(w.date)) })
       ]));
     });
 
@@ -1030,6 +1185,17 @@
     $('w-bmi-cat').textContent = c ? bmiCategory(c.bmi) : '';
     const r = weeklyRate();
     $('w-rate').textContent = r === null ? '–' : (r > 0 ? '+' : r < 0 ? '−' : '') + fmt(Math.abs(r), 2);
+    $('w-rate-sub').textContent = r === null ? 'kg pro Woche'
+      : r > 0.05 ? 'kg pro Woche · Trend steigt'
+      : r < -1 ? 'kg pro Woche · sehr schnell'
+      : r < -0.05 ? 'kg pro Woche · gutes Tempo'
+      : 'kg pro Woche · stabil';
+    const lw = latestWaist();
+    $('w-waist-val').textContent = lw ? fmt(lw.waist, 1) + ' cm' : '–';
+    if (lw && state.profile) {
+      const whtr = lw.waist / state.profile.height;
+      $('w-whtr').textContent = 'Taille/Größe ' + fmt(whtr, 2) + (whtr < 0.5 ? ' · gut' : whtr < 0.6 ? ' · erhöht' : ' · hoch');
+    } else $('w-whtr').textContent = lw ? '' : 'Optional beim Wiegen eintragen';
     drawChart();
   }
 
@@ -1037,10 +1203,12 @@
     const box = $('weight-chart');
     const ws = [...state.weights].sort((a, b) => a.date.localeCompare(b.date));
     const p = state.profile;
+    $('chart-legend').hidden = ws.length < 2;
     if (ws.length < 2) {
       box.replaceChildren(el('p', { class: 'empty', text: 'Ab zwei Einträgen siehst du hier deine Kurve.' }));
       return;
     }
+    const trend = weightTrend();
     const W = 400, H = 220, L = 40, R = 8, T = 14, B = 26;
     const xs = ws.map((w) => parseKey(w.date).getTime());
     const vals = ws.map((w) => w.kg);
@@ -1078,11 +1246,13 @@
       add('line', { x1: L, x2: W - R, y1: gy, y2: gy, stroke: 'var(--blue)', 'stroke-width': 1.5, 'stroke-dasharray': '6 5' });
       add('text', { x: W - R, y: gy - 6, 'text-anchor': 'end', 'font-size': 12, fill: 'var(--blue)' }, 'Ziel ' + fmt(p.goal, 1) + ' kg');
     }
-    const pts = ws.map((w, i) => sx(xs[i]) + ',' + sy(w.kg)).join(' ');
-    add('polygon', { points: `${sx(xs[0])},${H - B} ${pts} ${sx(xs.at(-1))},${H - B}`, fill: 'var(--accent)', opacity: 0.12 });
-    add('polyline', { points: pts, fill: 'none', stroke: 'var(--accent)', 'stroke-width': 2.5, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
+    const tpts = trend.map((t, i) => sx(xs[i]) + ',' + sy(t.trend)).join(' ');
+    add('polygon', { points: `${sx(xs[0])},${H - B} ${tpts} ${sx(xs.at(-1))},${H - B}`, fill: 'var(--accent)', opacity: 0.12 });
+    add('polyline', { points: ws.map((w, i) => sx(xs[i]) + ',' + sy(w.kg)).join(' '), fill: 'none', stroke: 'var(--accent)', 'stroke-width': 1, opacity: 0.35 });
+    add('polyline', { points: tpts, fill: 'none', stroke: 'var(--accent)', 'stroke-width': 3, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
     ws.forEach((w, i) => {
-      const dot = add('circle', { cx: sx(xs[i]), cy: sy(w.kg), r: ws.length > 40 ? 2 : 4, fill: 'var(--card)', stroke: 'var(--accent)', 'stroke-width': 2 });
+      const last = i === ws.length - 1;
+      const dot = add('circle', { cx: sx(xs[i]), cy: sy(w.kg), r: last ? 5 : ws.length > 40 ? 2 : 3.5, fill: last ? 'var(--accent)' : 'var(--card)', stroke: 'var(--accent)', 'stroke-width': 2 });
       const title = document.createElementNS(ns, 'title');
       title.textContent = fmtDate(w.date) + ': ' + fmt(w.kg, 1) + ' kg';
       dot.appendChild(title);
@@ -1102,7 +1272,7 @@
           el('div', { class: 'muted', text: fmtDate(w.date) + ' · ' + w.min + ' Min.' })
         ]),
         el('span', { class: 'pill', text: fmt(w.kcal) + ' kcal' }),
-        el('button', { class: 'icon', 'aria-label': 'Löschen', text: '✕', onclick: () => { state.workouts = state.workouts.filter((x) => x.id !== w.id); save(); } })
+        el('button', { class: 'icon', 'aria-label': 'Löschen', text: '✕', onclick: () => removeWithUndo('workouts', w, w.type) })
       ]));
     });
     const mon = dateKey(mondayOf(new Date()));
@@ -1121,13 +1291,67 @@
     $('t-est').value = min > 0 ? '≈ ' + fmt(workoutKcal(met, min, currentWeight())) + ' kcal' : '–';
   }
 
+  // Welcher Tag im Bereich „Essen“ angezeigt wird (zum Nachtragen)
+  let foodDay = today();
+  function dayLabel(k) {
+    const diff = Math.round((parseKey(today()) - parseKey(k)) / 864e5);
+    return diff === 0 ? 'Heute' : diff === 1 ? 'Gestern' : diff === 2 ? 'Vorgestern' : parseKey(k).toLocaleDateString('de-DE', { weekday: 'long' });
+  }
+  function shiftFoodDay(n) {
+    const d = parseKey(foodDay); d.setDate(d.getDate() + n);
+    const k = dateKey(d);
+    if (k > today()) return;
+    foodDay = k;
+    renderFood();
+  }
+  $('fd-prev').addEventListener('click', () => shiftFoodDay(-1));
+  $('fd-next').addEventListener('click', () => shiftFoodDay(1));
+
+  // Die häufigsten eigenen Einträge als Ein-Tipp-Buttons
+  function favoriteFoods() {
+    const quick = new Set(QUICK_FOODS.map((q) => q[0]));
+    const counts = new Map();
+    state.foods.forEach((f) => {
+      if (quick.has(f.name)) return;
+      const key = f.name.toLowerCase() + '|' + f.kcal;
+      const e = counts.get(key) || { name: f.name, kcal: f.kcal, protein: f.protein || 0, n: 0, last: '' };
+      e.n++; if (f.date > e.last) e.last = f.date;
+      counts.set(key, e);
+    });
+    return [...counts.values()].sort((a, b) => b.n - a.n || b.last.localeCompare(a.last)).slice(0, 6);
+  }
+
+  function addFood(name, kcal, protein) {
+    state.foods.push({ id: uid(), date: foodDay, name, kcal, protein: protein || 0, meal: $('f-meal').value });
+    save();
+    showToast(name + ' hinzugefügt', fmt(kcal) + ' kcal · ' + $('f-meal').value);
+  }
+
   function renderFood() {
     const t = today();
+    if (foodDay > t) foodDay = t;
+    const day = foodDay;
+    const isToday = day === t;
+    $('fd-label').textContent = dayLabel(day);
+    $('fd-date').textContent = parseKey(day).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
+    $('fd-next').disabled = isToday;
+    $('f-day-title').textContent = isToday ? 'Heute gegessen' : dayLabel(day) + ' gegessen';
+
+    const names = [...new Set(state.foods.map((f) => f.name))].sort((a, b) => a.localeCompare(b, 'de'));
+    $('food-names').replaceChildren(...names.map((n) => el('option', { value: n })));
+
+    const favs = favoriteFoods();
+    $('recent-wrap').hidden = !favs.length;
+    $('recent-foods').replaceChildren(...favs.map((f) => el('button', {
+      class: 'secondary', type: 'button', text: f.name + ' · ' + f.kcal,
+      onclick: () => addFood(f.name, f.kcal, f.protein)
+    })));
+
     const c = calc();
-    const items = state.foods.filter((f) => f.date === t);
+    const items = state.foods.filter((f) => f.date === day);
     const list = $('food-list');
     list.replaceChildren();
-    if (!items.length) list.appendChild(el('li', { class: 'empty', text: 'Heute noch nichts eingetragen.' }));
+    if (!items.length) list.appendChild(el('li', { class: 'empty', text: (isToday ? 'Heute' : dayLabel(day)) + ' noch nichts eingetragen.' }));
     ['Frühstück', 'Mittagessen', 'Abendessen', 'Snack'].forEach((meal) => {
       items.filter((f) => f.meal === meal).forEach((f) => {
         list.appendChild(el('li', null, [
@@ -1136,7 +1360,7 @@
             el('div', { class: 'muted', text: meal + (f.protein ? ' · ' + f.protein + ' g Eiweiß' : '') })
           ]),
           el('span', { class: 'num', text: fmt(f.kcal) + ' kcal' }),
-          el('button', { class: 'icon', 'aria-label': 'Löschen', text: '✕', onclick: () => { state.foods = state.foods.filter((x) => x.id !== f.id); save(); } })
+          el('button', { class: 'icon', 'aria-label': 'Löschen', text: '✕', onclick: () => removeWithUndo('foods', f, f.name) })
         ]));
       });
     });
@@ -1147,7 +1371,7 @@
     $('f-protein-total').textContent = fmt(prot) + ' g';
     $('f-protein-sub').textContent = c ? 'von ' + c.protein + ' g' : '';
 
-    const glasses = state.water[t] || 0;
+    const glasses = state.water[day] || 0;
     const goal = c ? c.water / 250 : 8;
     const shown = Math.max(goal, glasses + 1, 8);
     const water = $('water');
@@ -1156,7 +1380,7 @@
       water.appendChild(el('button', {
         class: 'glass' + (i < glasses ? ' full' : ''),
         'aria-label': (i + 1) + ' Gläser',
-        onclick: () => { state.water[t] = (i + 1 === glasses) ? i : i + 1; save(); }
+        onclick: () => { state.water[day] = (i + 1 === glasses) ? i : i + 1; save(); }
       }));
     }
     $('water-text').textContent = fmt(glasses * 0.25, 2) + ' l von ' + fmt(goal * 0.25, 1) + ' l' + (glasses >= goal ? ' – super, Ziel erreicht! 💧' : '');
@@ -1257,22 +1481,26 @@
   QUICK_FOODS.forEach(([name, kcal, protein]) => {
     $('quick-foods').appendChild(el('button', {
       class: 'secondary', type: 'button', text: name + ' · ' + kcal,
-      onclick: () => {
-        state.foods.push({ id: uid(), date: today(), name, kcal, protein, meal: $('f-meal').value });
-        save();
-      }
+      onclick: () => addFood(name, kcal, protein)
     }));
   });
+
+  $('weight-more').addEventListener('click', () => { showAllWeights = !showAllWeights; renderWeight(); });
 
   $('weight-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const date = $('w-date').value;
     const kg = Number($('w-value').value);
     if (!date || !(kg > 0)) return;
+    const before = state.weights.find((w) => w.date === date);
+    const waist = Number($('w-waist').value) || (before && before.waist) || undefined;
     state.weights = state.weights.filter((w) => w.date !== date); // ein Eintrag pro Tag
-    state.weights.push({ id: uid(), date, kg });
-    $('w-value').value = '';
+    const entry = { id: uid(), date, kg };
+    if (waist) entry.waist = waist;
+    state.weights.push(entry);
+    $('w-value').value = ''; $('w-waist').value = '';
     save();
+    showToast('Gewicht gespeichert', fmt(kg, 1) + ' kg am ' + fmtDate(date) + (waist ? ' · ' + fmt(waist, 1) + ' cm Bauch' : ''));
   });
 
   $('workout-form').addEventListener('submit', (e) => {
@@ -1295,9 +1523,17 @@
     const name = $('f-name').value.trim();
     const kcal = Number($('f-kcal').value);
     if (!name) return;
-    state.foods.push({ id: uid(), date: today(), name, kcal, protein: Number($('f-protein').value) || 0, meal: $('f-meal').value });
+    const protein = Number($('f-protein').value) || 0;
     $('f-name').value = ''; $('f-kcal').value = ''; $('f-protein').value = '';
-    save();
+    addFood(name, kcal, protein);
+  });
+  // Bekanntes Essen: Kalorien und Eiweiß vom letzten Mal vorschlagen
+  $('f-name').addEventListener('change', () => {
+    const name = $('f-name').value.trim().toLowerCase();
+    const prev = [...state.foods].reverse().find((f) => f.name.toLowerCase() === name);
+    if (!prev) return;
+    if (!$('f-kcal').value) $('f-kcal').value = prev.kcal;
+    if (!$('f-protein').value && prev.protein) $('f-protein').value = prev.protein;
   });
 
   $('profile-form').addEventListener('submit', (e) => {
@@ -1379,6 +1615,7 @@
         ? { key: 'train', title: 'Ruhetag', sub: 'Erholung gehört zum Training', done: true, tab: 'plan' }
         : { key: 'train', title: 'Training: ' + plan.title, sub: 'Laut deinem Wochenplan', done: plan.done || state.workouts.some((w) => w.date === t), tab: 'train' },
       { key: 'water', title: 'Wasser trinken', sub: glasses + ' von ' + goal + ' Gläsern', done: glasses >= goal, tab: 'food' },
+      { key: 'steps', title: fmt(STEP_GOAL) + ' Schritte', sub: (state.steps[t] ? fmt(state.steps[t]) : 'Noch keine') + ' Schritte eingetragen', done: (state.steps[t] || 0) >= STEP_GOAL, tab: 'train' },
       { key: 'food', title: 'Essen eintragen', sub: 'Mahlzeiten von heute', done: state.foods.some((f) => f.date === t), tab: 'food' }
     ];
   }
@@ -1475,14 +1712,34 @@
   }
 
   let toastTimer = null;
-  function showToast(title, body) {
+  let toastFn = null;
+  function showToast(title, body, action) {
     $('toast-title').textContent = title;
-    $('toast-body').textContent = body;
+    $('toast-body').textContent = body || '';
+    $('toast-body').hidden = !body;
+    toastFn = action ? action.fn : null;
+    $('toast-action').hidden = !action;
+    if (action) $('toast-action').textContent = action.label;
     $('toast').hidden = false;
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => { $('toast').hidden = true; }, 8000);
+    toastTimer = setTimeout(() => { $('toast').hidden = true; }, action ? 6000 : 8000);
   }
   $('toast-close').addEventListener('click', () => { $('toast').hidden = true; });
+  $('toast-action').addEventListener('click', () => {
+    $('toast').hidden = true;
+    if (toastFn) toastFn();
+    toastFn = null;
+  });
+
+  // Löschen mit „Rückgängig“
+  function removeWithUndo(listName, item, label) {
+    state[listName] = state[listName].filter((x) => x.id !== item.id);
+    save();
+    showToast(label + ' gelöscht', '', {
+      label: 'Rückgängig',
+      fn: () => { state[listName].push(item); save(); }
+    });
+  }
 
   // Prüft jede halbe Minute, ob eine Erinnerung fällig ist (bis 60 Min. nach der Uhrzeit)
   function checkReminders() {
@@ -1566,6 +1823,246 @@
     showToast('Kalender-Datei erstellt', count + ' wiederkehrende Termine. Öffne die Datei und wähle „Alle hinzufügen“.');
   });
 
+  // ---------- Schritte ----------
+  function renderSteps() {
+    const n = state.steps[today()] || 0;
+    $('s-bar').style.width = clamp(n / STEP_GOAL * 100, 0, 100) + '%';
+    $('s-text').textContent = n
+      ? fmt(n) + ' von ' + fmt(STEP_GOAL) + ' Schritten' + (n >= STEP_GOAL ? ' – Ziel erreicht! 👟' : ' – noch ' + fmt(STEP_GOAL - n))
+      : 'Ziel: ' + fmt(STEP_GOAL) + ' Schritte am Tag. Alltagsbewegung verbrennt oft mehr als ein Training.';
+  }
+  $('steps-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const n = Math.round(Number($('s-value').value));
+    if (!(n >= 0)) return;
+    state.steps[today()] = n;
+    $('s-value').value = '';
+    save();
+    showToast('Schritte gespeichert', fmt(n) + ' Schritte heute');
+  });
+
+  // ---------- Intervall-Timer ----------
+  const timer = { phase: 'idle', round: 0, endAt: 0, left: 0, running: false, tick: null, wake: null, cfg: null };
+  let audioCtx = null;
+
+  function timerCfg() {
+    return {
+      work: clamp(Number($('tm-work').value) || 40, 5, 600),
+      rest: clamp(Number($('tm-rest').value) || 0, 0, 600),
+      rounds: clamp(Number($('tm-rounds').value) || 1, 1, 50)
+    };
+  }
+  function applyPreset() {
+    const v = $('tm-preset').value;
+    document.querySelector('.tm-custom').hidden = v !== 'custom';
+    if (v !== 'custom') {
+      const [w, r, n] = v.split(',');
+      $('tm-work').value = w; $('tm-rest').value = r; $('tm-rounds').value = n;
+    }
+    if (!timer.running && timer.phase !== 'paused') timerIdle();
+  }
+  const mmss = (sec) => Math.floor(sec / 60) + ':' + pad(sec % 60);
+
+  function timerIdle() {
+    const c = timerCfg();
+    timer.phase = 'idle';
+    const total = c.rounds * c.work + (c.rounds - 1) * c.rest;
+    showTimer('idle', 'Bereit', c.work, c.rounds + ' Runden · ' + mmss(total) + ' Min. gesamt', 0);
+  }
+  function showTimer(phase, label, sec, sub, progress) {
+    $('tm-display').dataset.phase = phase;
+    $('tm-phase').textContent = label;
+    $('tm-time').textContent = mmss(Math.max(0, Math.ceil(sec)));
+    $('tm-round').textContent = sub;
+    $('tm-bar').style.width = clamp(progress * 100, 0, 100) + '%';
+  }
+
+  function beep(freq, ms) {
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.frequency.value = freq; o.type = 'sine';
+      g.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + ms / 1000);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(); o.stop(audioCtx.currentTime + ms / 1000);
+    } catch (e) { /* kein Ton möglich */ }
+  }
+  const buzz = (pattern) => { try { navigator.vibrate && navigator.vibrate(pattern); } catch (e) { /* ignorieren */ } };
+
+  function startPhase(phase) {
+    const c = timer.cfg;
+    timer.phase = phase;
+    const dur = phase === 'prep' ? 5 : phase === 'work' ? c.work : c.rest;
+    timer.endAt = Date.now() + dur * 1000;
+    timer.dur = dur;
+    timer.lastSec = null;
+    if (phase === 'work') { beep(880, 400); buzz([200, 80, 200]); }
+    if (phase === 'rest') { beep(440, 500); buzz(400); }
+  }
+
+  function timerTick() {
+    const c = timer.cfg;
+    const left = (timer.endAt - Date.now()) / 1000;
+    const sec = Math.ceil(left);
+    if (sec !== timer.lastSec && sec <= 3 && sec >= 1) beep(660, 120);
+    timer.lastSec = sec;
+    if (left <= 0) {
+      if (timer.phase === 'prep') startPhase('work');
+      else if (timer.phase === 'work') {
+        if (timer.round >= c.rounds) return timerFinish();
+        if (c.rest > 0) startPhase('rest');
+        else { timer.round++; startPhase('work'); }
+      } else if (timer.phase === 'rest') { timer.round++; startPhase('work'); }
+      return timerTick();
+    }
+    const labels = { prep: 'Gleich geht\'s los', work: 'Belastung', rest: 'Pause' };
+    showTimer(timer.phase, labels[timer.phase], left, 'Runde ' + timer.round + ' von ' + c.rounds, 1 - left / timer.dur);
+  }
+
+  async function keepAwake() {
+    try { if ('wakeLock' in navigator) timer.wake = await navigator.wakeLock.request('screen'); } catch (e) { /* ignorieren */ }
+  }
+  function releaseAwake() {
+    try { if (timer.wake) timer.wake.release(); } catch (e) { /* ignorieren */ }
+    timer.wake = null;
+  }
+
+  function timerStart() {
+    if (timer.running) { // Pause
+      timer.running = false;
+      timer.left = timer.endAt - Date.now();
+      clearInterval(timer.tick);
+      releaseAwake();
+      $('tm-start').textContent = 'Weiter';
+      $('tm-phase').textContent = 'Pausiert';
+      return;
+    }
+    if (timer.phase === 'idle' || timer.phase === 'done') {
+      timer.cfg = timerCfg();
+      timer.round = 1;
+      timer.startedAt = Date.now();
+      startPhase('prep');
+    } else {
+      timer.endAt = Date.now() + timer.left; // aus Pause fortsetzen
+    }
+    beep(1, 1); // Ton auf dem Handy freischalten
+    timer.running = true;
+    $('tm-start').textContent = 'Pause';
+    $('tm-stop').disabled = false;
+    keepAwake();
+    timerTick();
+    timer.tick = setInterval(timerTick, 200);
+  }
+
+  function timerStop() {
+    timer.running = false;
+    clearInterval(timer.tick);
+    releaseAwake();
+    $('tm-start').textContent = 'Start';
+    $('tm-stop').disabled = true;
+    timerIdle();
+  }
+
+  function timerFinish() {
+    const c = timer.cfg;
+    clearInterval(timer.tick);
+    timer.running = false;
+    timer.phase = 'done';
+    releaseAwake();
+    beep(988, 250); setTimeout(() => beep(1319, 500), 260);
+    buzz([300, 100, 300, 100, 600]);
+    $('tm-start').textContent = 'Nochmal';
+    $('tm-stop').disabled = true;
+    const minutes = Math.max(1, Math.round((c.rounds * c.work + (c.rounds - 1) * c.rest) / 60));
+    showTimer('done', 'Geschafft! 💪', 0, c.rounds + ' Runden · ' + minutes + ' Min.', 1);
+    const preset = $('tm-preset');
+    const isPlank = preset.value === '45,15,4';
+    const type = isPlank ? 'Bodyweight / Zirkeltraining' : 'HIIT';
+    const met = (ACTIVITIES.find((a) => a[0] === type) || ['', 8])[1];
+    showToast('Training geschafft!', minutes + ' Min. ' + type, {
+      label: 'Eintragen',
+      fn: () => {
+        state.workouts.push({ id: uid(), date: today(), type, min: minutes, kcal: workoutKcal(met, minutes, currentWeight()) });
+        save();
+        showToast('Training eingetragen', minutes + ' Min. ' + type);
+      }
+    });
+  }
+
+  $('tm-preset').addEventListener('change', applyPreset);
+  ['tm-work', 'tm-rest', 'tm-rounds'].forEach((id) => $(id).addEventListener('input', () => { if (!timer.running) timerIdle(); }));
+  $('tm-start').addEventListener('click', timerStart);
+  $('tm-stop').addEventListener('click', timerStop);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && timer.running) keepAwake(); });
+  applyPreset();
+
+  // ---------- Erfolge ----------
+  function longestStreak() {
+    const days = [...new Set(state.workouts.map((w) => w.date))].sort();
+    let best = 0, cur = 0, prev = null;
+    days.forEach((d) => {
+      const p = prev ? parseKey(prev) : null;
+      if (p) p.setDate(p.getDate() + 1);
+      cur = p && dateKey(p) === d ? cur + 1 : 1;
+      best = Math.max(best, cur); prev = d;
+    });
+    return best;
+  }
+  function bestWeekMinutes() {
+    const weeks = {};
+    state.workouts.forEach((w) => { const k = dateKey(mondayOf(parseKey(w.date))); weeks[k] = (weeks[k] || 0) + w.min; });
+    return Math.max(0, ...Object.values(weeks));
+  }
+  function badgeList() {
+    const p = state.profile;
+    const minW = state.weights.length ? Math.min(...state.weights.map((w) => w.kg)) : null;
+    const lost = p && minW !== null ? p.start - minW : 0;
+    const total = p ? p.start - p.goal : 0;
+    const n = state.workouts.length;
+    const ls = longestStreak();
+    const firstWaist = state.weights.filter((w) => w.waist).sort((a, b) => a.date.localeCompare(b.date));
+    const waistLost = firstWaist.length > 1 ? firstWaist[0].waist - Math.min(...firstWaist.map((w) => w.waist)) : 0;
+    return [
+      ['start', '🚀', 'Los geht\'s', 'Profil angelegt', !!p],
+      ['first-workout', '🏃', 'Erstes Training', 'Ein Training eingetragen', n >= 1],
+      ['kg1', '⚖️', 'Erstes Kilo', '1 kg abgenommen', lost >= 1],
+      ['kg5', '🔥', '5 Kilo', '5 kg abgenommen', lost >= 5],
+      ['kg10', '🏅', '10 Kilo', '10 kg abgenommen', lost >= 10],
+      ['half', '🌗', 'Halbzeit', 'Halber Weg zum Ziel', total > 0 && lost >= total / 2],
+      ['goal', '🏆', 'Ziel erreicht', 'Wunschgewicht geschafft', total > 0 && lost >= total],
+      ['streak3', '📅', '3 Tage am Stück', '3 Trainingstage in Folge', ls >= 3],
+      ['streak7', '💎', '7 Tage am Stück', '7 Trainingstage in Folge', ls >= 7],
+      ['w10', '💪', '10 Trainings', '10 Trainings eingetragen', n >= 10],
+      ['w50', '🦾', '50 Trainings', '50 Trainings eingetragen', n >= 50],
+      ['who', '❤️', 'WHO-Woche', '150 Min. Sport in einer Woche', bestWeekMinutes() >= 150],
+      ['steps', '👟', 'Schrittmacher', fmt(STEP_GOAL) + ' Schritte an einem Tag', Object.values(state.steps).some((v) => v >= STEP_GOAL)],
+      ['waist', '📏', 'Weniger Bauch', '3 cm weniger Bauchumfang', waistLost >= 3]
+    ];
+  }
+  function renderBadges() {
+    $('badge-card').hidden = !state.profile;
+    if (!state.profile) return;
+    const list = badgeList();
+    const got = list.filter((b) => b[4]);
+    $('badge-count').textContent = got.length + ' von ' + list.length + ' freigeschaltet';
+    $('badges').replaceChildren(...list.map(([id, ico, name, desc, ok]) => el('div', { class: 'badge' + (ok ? ' got' : ''), title: desc }, [
+      el('span', { class: 'ico', 'aria-hidden': 'true', text: ico }),
+      el('span', null, [el('strong', { text: name }), el('span', { text: ok ? 'Geschafft' : desc })])
+    ])));
+    // Neue Erfolge einmalig feiern
+    const seen = new Set(state.badges || []);
+    const fresh = got.filter((b) => !seen.has(b[0]));
+    if (fresh.length) {
+      state.badges = got.map((b) => b[0]);
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* ignorieren */ }
+      const b = fresh.at(-1);
+      // kurz warten, damit die Meldung nach „Gespeichert“ erscheint
+      if (seen.size || fresh.length === 1) setTimeout(() => showToast('Neuer Erfolg: ' + b[2] + ' ' + b[1], b[3]), 1800);
+    }
+  }
+
   function setDefaults() {
     $('w-date').value = today();
     $('t-date').value = today();
@@ -1589,7 +2086,13 @@
   // Offline-Modus: Service Worker speichert die App auf dem Gerät
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
     window.addEventListener('load', () => {
+      const hadController = !!navigator.serviceWorker.controller;
       navigator.serviceWorker.register('sw.js').catch(() => { /* ohne Offline-Modus weiter */ });
+      // Neue Version installiert → anbieten, sie gleich zu laden
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!hadController) return;
+        showToast('Neue Version installiert', 'Lade neu, um die Verbesserungen zu sehen.', { label: 'Neu laden', fn: () => location.reload() });
+      });
     });
   }
   try {

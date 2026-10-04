@@ -7,10 +7,11 @@
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Fit &amp; Leicht – Anleitung</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap">
 <style>
+  @font-face { font-family: "Barlow"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonts/barlow-400.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: "Barlow"; font-style: normal; font-weight: 600; font-display: swap; src: url("fonts/barlow-600.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: "Barlow"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/barlow-700.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: "Barlow Condensed"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/barlow-condensed-700.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
   /* Gleiche Tokens wie die App: helles Grün auf ruhigem Grau, Condensed-Überschriften wie auf einer Anzeigetafel */
   :root {
     color-scheme: light;
@@ -139,7 +140,7 @@
       <div class="feature">
         <span class="tag">Gewicht</span>
         <h3>Verlauf &amp; BMI</h3>
-        <p>Tägliche Einträge, Kurve mit Ziellinie, BMI und dein Tempo in kg pro Woche.</p>
+        <p>Kurve mit 7-Tage-Trend und Ziellinie, BMI, Tempo pro Woche und optional der Bauchumfang.</p>
       </div>
       <div class="feature">
         <span class="tag">Training</span>
@@ -149,12 +150,32 @@
       <div class="feature">
         <span class="tag">Essen</span>
         <h3>Ernährung &amp; Wasser</h3>
-        <p>Mahlzeiten mit Kalorien und Eiweiß, Schnell-Buttons und ein Wasser-Zähler in Gläsern.</p>
+        <p>Mahlzeiten mit Kalorien und Eiweiß, deine Favoriten mit einem Tipp, Nachtragen für vergangene Tage und ein Wasser-Zähler.</p>
       </div>
       <div class="feature">
         <span class="tag">Plan</span>
         <h3>Wochenplan</h3>
         <p>Trainingspläne für Einsteiger, Mittel und Profi. Jeden Tag abhaken, jeden Montag neu.</p>
+      </div>
+      <div class="feature">
+        <span class="tag">Training</span>
+        <h3>Intervall-Timer</h3>
+        <p>HIIT, Tabata, Plank oder eigene Zeiten. Mit Signalton, Vibration und Bildschirm-bleibt-an.</p>
+      </div>
+      <div class="feature">
+        <span class="tag">Alltag</span>
+        <h3>Schritte</h3>
+        <p>Tägliche Schritte eintragen, Ziel 8.000 am Tag.</p>
+      </div>
+      <div class="feature">
+        <span class="tag">Motivation</span>
+        <h3>Erfolge</h3>
+        <p>14 Abzeichen, vom ersten Training bis zum Wunschgewicht.</p>
+      </div>
+      <div class="feature">
+        <span class="tag">Erinnerung</span>
+        <h3>Erinnerungen</h3>
+        <p>Wiegen, Training, Wasser und Essen. Über den Handy-Kalender, auch wenn die App zu ist.</p>
       </div>
       <div class="feature">
         <span class="tag">Offline</span>
@@ -191,6 +212,29 @@
     <h2>Offline benutzen</h2>
     <p>Beim ersten Öffnen speichert die App alle ihre Dateien auf dem Gerät. Danach startet sie auch ohne Netz. Oben rechts zeigt sie dir, ob du gerade <strong>Online</strong> oder <strong>Offline</strong> bist. Deine Einträge werden in beiden Fällen sofort gespeichert.</p>
     <p class="muted">Updates holt sich die App automatisch, sobald du wieder Internet hast. Die neue Version siehst du beim nächsten Start.</p>
+  </section>
+
+  <section class="card">
+    <h2>Erinnerungen</h2>
+    <p>Unter <strong>Plan → Erinnerungen</strong> stellst du ein, woran die App dich erinnert: Wiegen, Training (nur an Trainingstagen deines Plans), Wasser und Essen eintragen.</p>
+    <ol class="steps">
+      <li><span><strong>In den Kalender übernehmen</strong> tippen und die Datei mit „Alle hinzufügen“ in den Handy-Kalender importieren. Dann klingelt das Handy auch, wenn die App geschlossen ist.</span></li>
+      <li><span>Optional <strong>Benachrichtigungen erlauben</strong>. Die kommen, solange die App offen ist oder im Hintergrund läuft.</span></li>
+      <li><span>Auf der Übersicht zeigt <strong>Heute zu tun</strong>, was noch fehlt.</span></li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>Tipps zum Abnehmen</h2>
+    <ol class="steps">
+      <li><span><strong>Achte auf den Trend, nicht auf den Tag.</strong> Das Gewicht schwankt täglich um 1–2 kg (Wasser, Salz). Die dicke Linie im Diagramm zeigt den 7-Tage-Schnitt.</span></li>
+      <li><span><strong>0,5 kg pro Woche ist ein gutes Tempo.</strong> Schneller kostet oft Muskeln und führt eher zum Jo-Jo-Effekt.</span></li>
+      <li><span><strong>Eiweiß und Krafttraining</strong> schützen deine Muskeln. Ziel: etwa 1,6 g Eiweiß pro kg und 2–3 Mal Kraft pro Woche.</span></li>
+      <li><span><strong>Schritte zählen mehr, als man denkt.</strong> 8.000–10.000 Schritte am Tag verbrennen oft mehr als ein Training.</span></li>
+      <li><span><strong>Miss den Bauchumfang.</strong> Wenn die Waage stehen bleibt, zeigt er oft trotzdem Fortschritt. Ein Wert unter 0,5 (Taille geteilt durch Größe) gilt als gesund.</span></li>
+      <li><span><strong>Schlaf 7–9 Stunden.</strong> Wenig Schlaf macht Heißhunger.</span></li>
+      <li><span><strong>Plateau?</strong> 1–2 Wochen Stillstand sind normal. Prüfe deine Portionen mit einer Küchenwaage und bleib dran.</span></li>
+    </ol>
   </section>
 
   <section class="card">
@@ -243,6 +287,7 @@
           <tr><td><code>manifest.webmanifest</code></td><td>Name, Farben und Icons für die Installation</td></tr>
           <tr><td><code>sw.js</code></td><td>Service Worker für den Offline-Modus. Bei Änderungen <code>VERSION</code> erhöhen.</td></tr>
           <tr><td><code>icons/</code></td><td>App-Icons</td></tr>
+          <tr><td><code>fonts/</code></td><td>Schrift Barlow (lokal gespeichert, damit sie offline geht und keine Daten an Google fließen; Lizenz: <code>OFL.txt</code>)</td></tr>
         </tbody>
       </table>
     </div>
