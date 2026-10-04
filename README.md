@@ -1,7 +1,8 @@
 # Fit & Leicht
 
 App zum Abnehmen mit Sport: Kalorienrechner, Gewichtsverlauf, Trainings- und
-Ernährungstagebuch, Intervall-Timer, Schritte, Erfolge, Wochenpläne und Erinnerungen. Sie lässt sich aufs Handy
+Ernährungstagebuch, Analyse, Intervall-Timer, Schritte, Erfolge, Wochenpläne und Erinnerungen
+(auf Android direkt in Google Kalender). Sie lässt sich aufs Handy
 installieren und läuft danach **auch offline**.
 
 Die ausführliche Anleitung steht in **[README.html](README.html)**

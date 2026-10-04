@@ -1,6 +1,6 @@
 // Fit & Leicht – Service Worker für den Offline-Modus.
 // Bei Änderungen an den Dateien VERSION erhöhen, damit Handys die neue Version laden.
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = 'fit-leicht-' + VERSION;
 const APP_FILES = [
   './',
