@@ -1,26 +1,24 @@
 # Fit & Leicht
 
-Eine einfache Web-Seite zum Abnehmen mit Sport – ohne Anmeldung, ohne Installation.
-Alles steckt in einer Datei: `index.html`.
+App zum Abnehmen mit Sport: Kalorienrechner, Gewichtsverlauf, Trainings- und
+Ernährungstagebuch, Wochenpläne und Erinnerungen. Sie lässt sich aufs Handy
+installieren und läuft danach **auch offline**.
 
-## Funktionen
+Die ausführliche Anleitung steht in **[README.html](README.html)**
+(installieren, offline nutzen, Erinnerungen, Daten sichern, GitHub Pages einrichten).
 
-- **Profil & Kalorienrechner** – Grundumsatz und Gesamtbedarf (Mifflin-St-Jeor),
-  persönliches Tagesziel mit Kaloriendefizit, Eiweiß- und Wasserziel,
-  voraussichtliches Datum bis zum Wunschgewicht.
-- **Gewicht** – tägliche Einträge, Verlaufskurve mit Ziellinie, BMI, Tempo pro Woche.
-- **Training** – Sportart und Dauer eintragen, Kalorienverbrauch wird geschätzt (MET-Werte),
-  Wochenübersicht mit WHO-Empfehlung (150 Min.), Trainings-Serie.
-- **Ernährung** – Mahlzeiten mit Kalorien/Eiweiß, Schnell-Buttons, Wasser-Tracker.
-- **Wochenplan** – Trainingspläne für Einsteiger, Mittel und Profi zum Abhaken.
-- **Backup** – Daten als JSON herunterladen und wieder laden.
+## Kurz
 
-Die Daten werden nur lokal im Browser gespeichert (`localStorage`).
+1. Einmalig GitHub Pages einschalten: *Settings → Pages → Deploy from a branch*, Ordner `/ (root)`.
+2. Die angezeigte Adresse am Handy öffnen und „Zum Home-Bildschirm“ bzw. „App installieren“ wählen.
+3. Unter **Plan → Erinnerungen** die Zeiten einstellen und „In den Kalender übernehmen“ tippen.
 
-## Benutzen
+| Datei | Inhalt |
+| --- | --- |
+| `index.html` | Die App |
+| `README.html` | Anleitung |
+| `manifest.webmanifest` | Daten für die Installation |
+| `sw.js` | Offline-Modus (bei Änderungen `VERSION` erhöhen) |
+| `icons/` | App-Icons |
 
-`index.html` im Browser öffnen – fertig. Am Handy am besten über GitHub Pages:
-Repository → *Settings* → *Pages* → Branch auswählen → die angezeigte URL öffnen und
-„Zum Startbildschirm hinzufügen“.
-
-> Hinweis: Die Werte sind Schätzungen. Bei Vorerkrankungen vor dem Start ärztlich beraten lassen.
+Die Daten bleiben nur auf dem Gerät. Ab und zu unter *Profil* ein Backup herunterladen.

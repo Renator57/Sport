@@ -2,11 +2,23 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#16a34a">
-<title>Fit & Leicht</title>
+<meta name="description" content="Abnehmen mit Sport: Kalorienrechner, Gewichtsverlauf, Trainings- und Ernährungstagebuch – funktioniert auch offline.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Fit &amp; Leicht">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Fit &amp; Leicht</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap">
 <style>
   :root {
+    color-scheme: light;
     --bg: #f4f6f5;
     --card: #ffffff;
     --text: #17201b;
@@ -22,9 +34,11 @@
     --blue-soft: #dbeafe;
     --shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 16px rgba(0,0,0,.04);
     --radius: 14px;
+    --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
       --bg: #0f1412;
       --card: #18201c;
       --text: #e8efea;
@@ -39,23 +53,47 @@
       --blue: #60a5fa;
       --blue-soft: #172a45;
       --shadow: none;
+      color-scheme: dark;
     }
   }
+  :root[data-theme="dark"] {
+    --bg: #0f1412;
+    --card: #18201c;
+    --text: #e8efea;
+    --muted: #94a39a;
+    --line: #2a3530;
+    --accent: #22c55e;
+    --accent-soft: #14361f;
+    --accent-text: #06210f;
+    --warn: #fbbf24;
+    --warn-soft: #3a2c0a;
+    --danger: #f87171;
+    --blue: #60a5fa;
+    --blue-soft: #172a45;
+    --shadow: none;
+    color-scheme: dark;
+  }
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; padding-top: env(safe-area-inset-top, 0px); }
+  [hidden] { display: none !important; }
   body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    padding-bottom: 84px;
+    font: 16px/1.5 var(--font-body);
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
   }
   header {
     padding: 20px 16px 8px;
     max-width: 760px;
     margin: 0 auto;
   }
-  header h1 { margin: 0; font-size: 1.6rem; letter-spacing: -.01em; }
+  header h1 { margin: 0; font: 700 2rem/1.1 var(--font-display); letter-spacing: .01em; text-transform: uppercase; }
+  header .head-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .sync { font-size: .8rem; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+  .sync::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .sync.ok::before { background: var(--accent); }
+  .sync.busy::before { background: var(--warn); }
   header p { margin: 2px 0 0; color: var(--muted); }
   main { max-width: 760px; margin: 0 auto; padding: 8px 16px; }
   section.tab { display: none; }
@@ -68,7 +106,7 @@
     padding: 16px;
     margin-bottom: 14px;
   }
-  .card h2 { margin: 0 0 10px; font-size: 1.1rem; }
+  .card h2 { margin: 0 0 10px; font: 700 1.3rem/1.2 var(--font-display); text-transform: uppercase; letter-spacing: .02em; text-wrap: balance; }
   .card h3 { margin: 14px 0 6px; font-size: 1rem; }
   .muted { color: var(--muted); font-size: .9rem; }
   .grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
@@ -78,7 +116,8 @@
     padding: 12px;
   }
   .stat .label { color: var(--muted); font-size: .8rem; }
-  .stat .value { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .stat .value { font: 700 1.75rem/1.15 var(--font-display); font-variant-numeric: tabular-nums; }
+  .stat .label { text-transform: uppercase; letter-spacing: .05em; font-size: .72rem; font-weight: 600; }
   .stat .sub { font-size: .8rem; color: var(--muted); }
   form .row { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-bottom: 10px; }
   label { display: block; font-size: .85rem; color: var(--muted); margin-bottom: 4px; }
@@ -93,6 +132,8 @@
     min-height: 44px;
   }
   input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { .bar > div { transition: none; } }
   button {
     font: inherit;
     font-weight: 600;
@@ -163,15 +204,46 @@
   nav.tabs button.active { color: var(--accent); }
   .tip { border-left: 4px solid var(--accent); padding: 4px 0 4px 12px; margin: 10px 0; }
   .tip strong { display: block; }
+  a.btn-link {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 10px 16px;
+    border-radius: 10px; border: 1px solid var(--line); background: var(--bg);
+    color: var(--text); font-weight: 600; text-decoration: none;
+  }
+  .todo li { gap: 12px; }
+  .todo .check {
+    width: 26px; height: 26px; border-radius: 50%; flex: none;
+    border: 2px solid var(--line); display: grid; place-items: center;
+    font-size: .85rem; font-weight: 700; color: var(--accent-text);
+  }
+  .todo li.done .check { background: var(--accent); border-color: var(--accent); }
+  .todo li.done .title { color: var(--muted); }
+  .todo button { min-height: 36px; padding: 6px 12px; font-size: .9rem; }
+  .rem-row { display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .rem-row:last-of-type { border-bottom: 0; }
+  .rem-row input[type=checkbox] { width: 24px; height: 24px; min-height: 0; accent-color: var(--accent); }
+  .rem-row label { margin: 0; color: var(--text); font-size: 1rem; font-weight: 600; }
+  .rem-row label small { display: block; color: var(--muted); font-weight: 400; font-size: .85rem; }
+  .rem-row input[type=time], .rem-row select { width: auto; min-width: 7.5rem; }
+  .toast {
+    position: fixed; left: 16px; right: 16px; bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    max-width: 728px; margin: 0 auto; z-index: 20;
+    background: var(--text); color: var(--bg); border-radius: 12px; padding: 12px 16px;
+    display: flex; gap: 12px; align-items: center; box-shadow: 0 8px 24px rgba(0,0,0,.2);
+  }
+  .toast .grow { flex: 1; min-width: 0; }
+  .toast button { background: transparent; color: var(--bg); min-height: 36px; padding: 6px 8px; }
   .seg { display: flex; gap: 6px; flex-wrap: wrap; }
-  .seg button { flex: 1; min-width: 90px; }
+  .seg button { flex: 1; min-width: 0; padding: 10px 8px; }
   .seg button.secondary.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Fit &amp; Leicht</h1>
+  <div class="head-row">
+    <h1>Fit &amp; Leicht</h1>
+    <span class="sync" id="sync" aria-live="polite"></span>
+  </div>
   <p id="greeting">Dein persönlicher Abnehm-Begleiter</p>
 </header>
 
@@ -183,6 +255,11 @@
       <h2>Willkommen! 👋</h2>
       <p>Trag zuerst unter <strong>Profil</strong> deine Daten ein. Dann berechne ich deinen Kalorienbedarf, dein Tagesziel und wie lange es bis zu deinem Wunschgewicht dauert.</p>
       <button data-goto="profile">Profil anlegen</button>
+    </div>
+
+    <div class="card" id="todo-card" hidden>
+      <h2>Heute zu tun</h2>
+      <ul class="list todo" id="todo-list"></ul>
     </div>
 
     <div class="card">
@@ -420,6 +497,47 @@
       <div class="bar"><div id="plan-bar" style="width:0"></div></div>
     </div>
     <div class="card" id="plan-days"></div>
+
+    <div class="card" id="reminders">
+      <h2>Erinnerungen</h2>
+      <p class="muted">Wähle, woran die App dich erinnern soll. Das Training richtet sich nach deinem Wochenplan, Ruhetage werden übersprungen.</p>
+      <div class="rem-row">
+        <input type="checkbox" id="r-weigh-on">
+        <label for="r-weigh-on">Wiegen<small>Morgens, vor dem Frühstück</small></label>
+        <input type="time" id="r-weigh-time" aria-label="Uhrzeit Wiegen">
+      </div>
+      <div class="rem-row">
+        <input type="checkbox" id="r-train-on">
+        <label for="r-train-on">Training<small>An Trainingstagen laut Plan</small></label>
+        <input type="time" id="r-train-time" aria-label="Uhrzeit Training">
+      </div>
+      <div class="rem-row">
+        <input type="checkbox" id="r-water-on">
+        <label for="r-water-on">Wasser trinken<small>Zwischen 9 und 21 Uhr</small></label>
+        <select id="r-water-every" aria-label="Wie oft Wasser">
+          <option value="2">alle 2 Std.</option>
+          <option value="3">alle 3 Std.</option>
+          <option value="4">alle 4 Std.</option>
+        </select>
+      </div>
+      <div class="rem-row">
+        <input type="checkbox" id="r-food-on">
+        <label for="r-food-on">Essen eintragen<small>Abends den Tag ergänzen</small></label>
+        <input type="time" id="r-food-time" aria-label="Uhrzeit Essen eintragen">
+      </div>
+
+      <h3>Im Handy-Kalender (empfohlen)</h3>
+      <p class="muted">Klingelt auch, wenn die App geschlossen ist, und braucht kein Internet. Tippe auf den Button, öffne die Datei und wähle „Alle hinzufügen“. Wenn du Zeiten oder deinen Plan änderst, importiere die Datei neu und lösche die alten Termine.</p>
+      <div class="actions">
+        <button type="button" id="ics-btn">In den Kalender übernehmen</button>
+      </div>
+
+      <h3>Benachrichtigungen der App</h3>
+      <p class="muted" id="notif-text"></p>
+      <div class="actions">
+        <button type="button" class="secondary" id="notif-btn">Benachrichtigungen erlauben</button>
+      </div>
+    </div>
     <div class="card">
       <h2>So funktioniert's</h2>
       <p><strong>Kaloriendefizit:</strong> Du nimmst ab, wenn du weniger Energie aufnimmst als du verbrauchst. Rund 7.700 kcal entsprechen etwa 1 kg Körperfett.</p>
@@ -521,14 +639,21 @@
     </div>
 
     <div class="card">
+      <h2>Hilfe</h2>
+      <p class="muted">So installierst du die App auf dem Handy und nutzt sie offline.</p>
+      <a class="btn-link" href="README.html">Anleitung öffnen</a>
+    </div>
+
+    <div class="card">
       <h2>Daten sichern</h2>
-      <p class="muted">Deine Daten werden nur in diesem Browser gespeichert. Mach ab und zu ein Backup, damit nichts verloren geht.</p>
+      <p class="muted" id="storage-text">Deine Daten bleiben nur auf diesem Gerät gespeichert – auch ohne Internet. Mach ab und zu ein Backup. Damit kannst du die Daten auch auf ein anderes Gerät übertragen.</p>
       <div class="actions">
         <button class="secondary" id="export-btn" type="button">Backup herunterladen</button>
         <button class="secondary" id="import-btn" type="button">Backup laden</button>
         <input type="file" id="import-file" accept="application/json" hidden>
         <button class="secondary" id="reset-btn" type="button" style="color:var(--danger)">Alles löschen</button>
       </div>
+      <p class="muted" id="backup-msg" aria-live="polite"></p>
     </div>
   </section>
 
@@ -562,6 +687,11 @@
     </button>
   </div>
 </nav>
+
+<div class="toast" id="toast" role="status" hidden>
+  <div class="grow"><strong id="toast-title"></strong><div id="toast-body"></div></div>
+  <button type="button" id="toast-close" aria-label="Schließen">✕</button>
+</div>
 
 <script>
 (function () {
@@ -686,18 +816,64 @@
   }
 
   // ---------- Speicher ----------
-  const emptyState = () => ({ profile: null, weights: [], workouts: [], foods: [], water: {}, plan: { level: 'beginner', done: {} } });
+  // Alles bleibt auf diesem Gerät (localStorage) – funktioniert ohne Internet.
+  const defaultReminders = () => ({
+    weigh: { on: true, time: '07:00' },
+    train: { on: true, time: '18:00' },
+    water: { on: false, every: 3 },
+    food: { on: true, time: '20:30' },
+    notified: { date: '', keys: [] }
+  });
+  const emptyState = () => ({ profile: null, weights: [], workouts: [], foods: [], water: {}, plan: { level: 'beginner', done: {} }, reminders: defaultReminders() });
   let state = emptyState();
+  let loaded = false;
+
+  function fromData(data) {
+    const next = Object.assign(emptyState(), data || {});
+    if (!next.plan || !next.plan.done) next.plan = { level: (next.plan && next.plan.level) || 'beginner', done: {} };
+    const r = defaultReminders();
+    next.reminders = Object.assign(r, next.reminders || {});
+    ['weigh', 'train', 'water', 'food'].forEach((k) => { next.reminders[k] = Object.assign(defaultReminders()[k], next.reminders[k] || {}); });
+    if (!next.reminders.notified || !Array.isArray(next.reminders.notified.keys)) next.reminders.notified = { date: '', keys: [] };
+    return next;
+  }
+
+  // Alte Tagesdaten (Essen, Wasser, Plan-Haken) nach 90 Tagen entfernen, damit der Speicher klein bleibt
+  function prune() {
+    const d = new Date(); d.setDate(d.getDate() - 90);
+    const cut = dateKey(d);
+    state.foods = state.foods.filter((f) => f.date >= cut);
+    Object.keys(state.water).forEach((k) => { if (k < cut) delete state.water[k]; });
+    Object.keys(state.plan.done).forEach((k) => { if (k < cut) delete state.plan.done[k]; });
+  }
 
   function load() {
     try {
       const raw = localStorage.getItem(STORE_KEY);
-      if (raw) state = Object.assign(emptyState(), JSON.parse(raw));
+      if (raw) state = fromData(JSON.parse(raw));
     } catch (e) { /* Speicher nicht verfügbar – App läuft trotzdem */ }
+    loaded = true;
   }
+
   function save() {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* ignorieren */ }
+    prune();
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    } catch (e) {
+      setStatus('', 'Nicht gespeichert');
+    }
     render();
+  }
+
+  function setStatus(cls, text) {
+    const s = $('sync');
+    s.className = 'sync ' + cls;
+    s.textContent = text;
+  }
+
+  function updateOnline() {
+    if (navigator.onLine) setStatus('ok', 'Online');
+    else setStatus('busy', 'Offline');
   }
 
   // ---------- Berechnungen ----------
@@ -760,6 +936,8 @@
     renderWorkouts();
     renderFood();
     renderPlan();
+    renderTodo();
+    renderReminders();
     renderProfile();
   }
 
@@ -767,7 +945,7 @@
     const c = calc();
     const p = state.profile;
     const t = today();
-    $('setup-hint').hidden = !!p;
+    $('setup-hint').hidden = !loaded || !!p;
     $('greeting').textContent = p && p.name ? 'Hallo ' + p.name + ', bleib dran! 💪' : 'Dein persönlicher Abnehm-Begleiter';
 
     const eaten = state.foods.filter((f) => f.date === t).reduce((s, f) => s + f.kcal, 0);
@@ -1146,6 +1324,7 @@
     const a = el('a', { href: URL.createObjectURL(blob), download: 'fit-leicht-backup-' + today() + '.json' });
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    $('backup-msg').textContent = 'Backup wird heruntergeladen.';
   });
   $('import-btn').addEventListener('click', () => $('import-file').click());
   $('import-file').addEventListener('change', (e) => {
@@ -1154,19 +1333,237 @@
     file.text().then((txt) => {
       const data = JSON.parse(txt);
       if (!data || !Array.isArray(data.weights)) throw new Error('format');
-      state = Object.assign(emptyState(), data);
+      state = fromData(data);
       fillProfileForm();
       save();
-      alert('Backup geladen.');
-    }).catch(() => alert('Die Datei konnte nicht gelesen werden.'));
+      $('backup-msg').textContent = 'Backup geladen.';
+    }).catch(() => { $('backup-msg').textContent = 'Die Datei ist kein gültiges Fit-&-Leicht-Backup.'; });
     e.target.value = '';
   });
+  let resetArmed = null;
   $('reset-btn').addEventListener('click', () => {
-    if (!confirm('Wirklich alle Daten löschen? Das kann nicht rückgängig gemacht werden.')) return;
+    const btn = $('reset-btn');
+    if (!resetArmed) {
+      btn.textContent = 'Wirklich alles löschen? Nochmal tippen';
+      resetArmed = setTimeout(() => { resetArmed = null; btn.textContent = 'Alles löschen'; }, 4000);
+      return;
+    }
+    clearTimeout(resetArmed); resetArmed = null;
+    btn.textContent = 'Alles löschen';
+    $('backup-msg').textContent = 'Alle Daten gelöscht.';
     state = emptyState();
     document.querySelectorAll('form').forEach((f) => f.reset());
     setDefaults();
     save();
+  });
+
+  // ---------- Heute zu tun ----------
+  const isRestDay = (title) => /^Ruhetag/.test(title);
+
+  function todayPlan() {
+    const idx = (new Date().getDay() + 6) % 7;
+    const day = PLANS[state.plan.level].days[idx];
+    const done = (state.plan.done[dateKey(mondayOf(new Date()))] || []).includes(idx);
+    return { idx, title: day[0], rest: isRestDay(day[0]), done };
+  }
+
+  function todoItems() {
+    const t = today();
+    const c = calc();
+    const plan = todayPlan();
+    const glasses = state.water[t] || 0;
+    const goal = c ? c.water / 250 : 8;
+    return [
+      { key: 'weigh', title: 'Wiegen', sub: 'Gewicht von heute eintragen', done: state.weights.some((w) => w.date === t), tab: 'weight' },
+      plan.rest
+        ? { key: 'train', title: 'Ruhetag', sub: 'Erholung gehört zum Training', done: true, tab: 'plan' }
+        : { key: 'train', title: 'Training: ' + plan.title, sub: 'Laut deinem Wochenplan', done: plan.done || state.workouts.some((w) => w.date === t), tab: 'train' },
+      { key: 'water', title: 'Wasser trinken', sub: glasses + ' von ' + goal + ' Gläsern', done: glasses >= goal, tab: 'food' },
+      { key: 'food', title: 'Essen eintragen', sub: 'Mahlzeiten von heute', done: state.foods.some((f) => f.date === t), tab: 'food' }
+    ];
+  }
+
+  function renderTodo() {
+    $('todo-card').hidden = !state.profile;
+    if (!state.profile) return;
+    const list = $('todo-list');
+    list.replaceChildren();
+    todoItems().forEach((it) => {
+      list.appendChild(el('li', { class: it.done ? 'done' : '' }, [
+        el('span', { class: 'check', 'aria-hidden': 'true', text: it.done ? '✓' : '' }),
+        el('div', { class: 'grow' }, [
+          el('div', { class: 'title', text: it.title }),
+          el('div', { class: 'muted', text: it.done ? 'Erledigt' : it.sub })
+        ]),
+        it.done ? null : el('button', { type: 'button', class: 'secondary', text: 'Los', onclick: () => showTab(it.tab) })
+      ]));
+    });
+  }
+
+  // ---------- Erinnerungen ----------
+  function renderReminders() {
+    const r = state.reminders;
+    if (document.activeElement && $('reminders').contains(document.activeElement) && document.activeElement.type === 'time') return;
+    $('r-weigh-on').checked = r.weigh.on; $('r-weigh-time').value = r.weigh.time;
+    $('r-train-on').checked = r.train.on; $('r-train-time').value = r.train.time;
+    $('r-water-on').checked = r.water.on; $('r-water-every').value = String(r.water.every);
+    $('r-food-on').checked = r.food.on; $('r-food-time').value = r.food.time;
+    renderNotifStatus();
+  }
+
+  function renderNotifStatus() {
+    const btn = $('notif-btn');
+    const txt = $('notif-text');
+    if (!('Notification' in window)) {
+      txt.textContent = 'Dieser Browser kann keine Benachrichtigungen anzeigen. Nutze die Kalender-Erinnerungen. Auf dem iPhone geht es, wenn die App auf dem Home-Bildschirm installiert ist.';
+      btn.hidden = true;
+      return;
+    }
+    const perm = Notification.permission;
+    btn.hidden = perm !== 'default';
+    txt.textContent = perm === 'granted'
+      ? 'Erlaubt. Die App meldet sich zur eingestellten Zeit, solange sie geöffnet ist oder im Hintergrund läuft.'
+      : perm === 'denied'
+        ? 'Blockiert. Du kannst Benachrichtigungen in den Einstellungen deines Browsers wieder erlauben.'
+        : 'Die App meldet sich zur eingestellten Zeit, solange sie geöffnet ist oder im Hintergrund läuft.';
+  }
+
+  function bindReminder(id, apply) {
+    $(id).addEventListener('change', (e) => { apply(e.target); save(); });
+  }
+  bindReminder('r-weigh-on', (t) => { state.reminders.weigh.on = t.checked; });
+  bindReminder('r-weigh-time', (t) => { if (t.value) state.reminders.weigh.time = t.value; });
+  bindReminder('r-train-on', (t) => { state.reminders.train.on = t.checked; });
+  bindReminder('r-train-time', (t) => { if (t.value) state.reminders.train.time = t.value; });
+  bindReminder('r-water-on', (t) => { state.reminders.water.on = t.checked; });
+  bindReminder('r-water-every', (t) => { state.reminders.water.every = Number(t.value); });
+  bindReminder('r-food-on', (t) => { state.reminders.food.on = t.checked; });
+  bindReminder('r-food-time', (t) => { if (t.value) state.reminders.food.time = t.value; });
+
+  $('notif-btn').addEventListener('click', () => {
+    Notification.requestPermission().then(() => {
+      renderNotifStatus();
+      if (Notification.permission === 'granted') notify('Erinnerungen sind an', 'So sieht eine Erinnerung von Fit & Leicht aus.');
+    });
+  });
+
+  // Alle Erinnerungen von heute: [key, 'HH:MM', Titel, Text, schon erledigt?]
+  function dueList() {
+    const r = state.reminders;
+    const items = todoItems();
+    const done = (k) => items.find((i) => i.key === k).done;
+    const plan = todayPlan();
+    const list = [];
+    if (r.weigh.on) list.push(['weigh', r.weigh.time, 'Zeit zum Wiegen ⚖️', 'Trag dein Gewicht von heute ein.', done('weigh')]);
+    if (r.train.on && !plan.rest) list.push(['train', r.train.time, 'Training: ' + plan.title, 'Heute steht dein Training an. Los geht\'s!', done('train')]);
+    if (r.water.on) {
+      for (let h = 9; h <= 21; h += r.water.every) list.push(['water-' + h, pad(h) + ':00', 'Wasser trinken 💧', 'Zeit für ein Glas Wasser.', done('water')]);
+    }
+    if (r.food.on) list.push(['food', r.food.time, 'Essen eintragen 🍽️', 'Hast du alle Mahlzeiten von heute eingetragen?', done('food')]);
+    return list;
+  }
+
+  function notify(title, body) {
+    const opts = { body, icon: 'icons/icon-192.png', badge: 'icons/icon-192.png', tag: 'fit-leicht-' + title, lang: 'de' };
+    if ('Notification' in window && Notification.permission === 'granted') {
+      const viaSw = navigator.serviceWorker && navigator.serviceWorker.controller
+        ? navigator.serviceWorker.ready.then((reg) => reg.showNotification(title, opts))
+        : Promise.reject();
+      viaSw.catch(() => { try { new Notification(title, opts); } catch (e) { /* ignorieren */ } });
+    }
+    if (document.visibilityState === 'visible') showToast(title, body);
+  }
+
+  let toastTimer = null;
+  function showToast(title, body) {
+    $('toast-title').textContent = title;
+    $('toast-body').textContent = body;
+    $('toast').hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { $('toast').hidden = true; }, 8000);
+  }
+  $('toast-close').addEventListener('click', () => { $('toast').hidden = true; });
+
+  // Prüft jede halbe Minute, ob eine Erinnerung fällig ist (bis 60 Min. nach der Uhrzeit)
+  function checkReminders() {
+    if (!state.profile) return;
+    const t = today();
+    const n = state.reminders.notified;
+    if (n.date !== t) { n.date = t; n.keys = []; }
+    const now = new Date();
+    const mins = now.getHours() * 60 + now.getMinutes();
+    let fired = false;
+    dueList().forEach(([key, time, title, body, isDone]) => {
+      const [h, m] = time.split(':').map(Number);
+      const at = h * 60 + m;
+      if (isDone || n.keys.includes(key) || mins < at || mins > at + 60) return;
+      n.keys.push(key);
+      fired = true;
+      notify(title, body);
+    });
+    if (fired) save();
+  }
+
+  // ---------- Kalender-Datei (.ics) ----------
+  function icsEscape(text) {
+    return String(text).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+  }
+  function icsFold(line) {
+    const enc = new TextEncoder();
+    const out = [];
+    let cur = '', bytes = 0;
+    for (const ch of line) {
+      const b = enc.encode(ch).length;
+      if (bytes + b > 74) { out.push(cur); cur = ' '; bytes = 1; }
+      cur += ch; bytes += b;
+    }
+    out.push(cur);
+    return out.join('\r\n');
+  }
+  const icsDate = (d, hhmm) => dateKey(d).replace(/-/g, '') + 'T' + hhmm.replace(':', '') + '00';
+
+  function buildIcs() {
+    const r = state.reminders;
+    const now = new Date();
+    const stamp = now.toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+    const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Fit & Leicht//Erinnerungen//DE', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'X-WR-CALNAME:Fit & Leicht'];
+    const event = (uid, start, time, rrule, summary, desc) => {
+      lines.push('BEGIN:VEVENT', 'UID:' + uid + '@fit-leicht', 'DTSTAMP:' + stamp,
+        'DTSTART:' + icsDate(start, time), 'DURATION:PT15M', 'RRULE:' + rrule,
+        'SUMMARY:' + icsEscape(summary), 'DESCRIPTION:' + icsEscape(desc), 'TRANSP:TRANSPARENT',
+        'BEGIN:VALARM', 'ACTION:DISPLAY', 'TRIGGER:PT0M', 'DESCRIPTION:' + icsEscape(summary), 'END:VALARM',
+        'END:VEVENT');
+    };
+    const start = new Date();
+    let count = 0;
+    if (r.weigh.on) { event('wiegen', start, r.weigh.time, 'FREQ=DAILY', 'Wiegen ⚖️', 'Morgens vor dem Frühstück wiegen und in Fit & Leicht eintragen.'); count++; }
+    if (r.train.on) {
+      const codes = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
+      PLANS[state.plan.level].days.forEach((d, i) => {
+        if (isRestDay(d[0])) return;
+        const day = new Date(start);
+        day.setDate(day.getDate() + ((i - ((day.getDay() + 6) % 7)) + 7) % 7);
+        event('training-' + codes[i].toLowerCase(), day, r.train.time, 'FREQ=WEEKLY;BYDAY=' + codes[i],
+          'Training: ' + d[0], d[1].join('\n'));
+        count++;
+      });
+    }
+    if (r.water.on) {
+      for (let h = 9; h <= 21; h += r.water.every) { event('wasser-' + h, start, pad(h) + ':00', 'FREQ=DAILY', 'Wasser trinken 💧', 'Zeit für ein Glas Wasser.'); count++; }
+    }
+    if (r.food.on) { event('essen', start, r.food.time, 'FREQ=DAILY', 'Essen eintragen 🍽️', 'Alle Mahlzeiten von heute in Fit & Leicht eintragen.'); count++; }
+    lines.push('END:VCALENDAR');
+    return { text: lines.map(icsFold).join('\r\n') + '\r\n', count };
+  }
+
+  $('ics-btn').addEventListener('click', () => {
+    const { text, count } = buildIcs();
+    if (!count) { showToast('Keine Erinnerung ausgewählt', 'Schalte oben mindestens eine Erinnerung ein.'); return; }
+    const blob = new Blob([text], { type: 'text/calendar;charset=utf-8' });
+    const a = el('a', { href: URL.createObjectURL(blob), download: 'fit-leicht-erinnerungen.ics' });
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    showToast('Kalender-Datei erstellt', count + ' wiederkehrende Termine. Öffne die Datei und wähle „Alle hinzufügen“.');
   });
 
   function setDefaults() {
@@ -1179,6 +1576,22 @@
   setDefaults();
   fillProfileForm();
   render();
+  updateOnline();
+  checkReminders();
+  setInterval(checkReminders, 30000);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { render(); checkReminders(); } });
+  window.addEventListener('online', updateOnline);
+  window.addEventListener('offline', updateOnline);
+
+  // Browser bitten, die Daten nicht automatisch zu löschen
+  if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+
+  // Offline-Modus: Service Worker speichert die App auf dem Gerät
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => { /* ohne Offline-Modus weiter */ });
+    });
+  }
   try {
     const t = sessionStorage.getItem('fit-leicht-tab');
     if (t && $('tab-' + t)) showTab(t);

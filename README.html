@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16a34a">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Fit &amp; Leicht – Anleitung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap">
+<style>
+  /* Gleiche Tokens wie die App: helles Grün auf ruhigem Grau, Condensed-Überschriften wie auf einer Anzeigetafel */
+  :root {
+    color-scheme: light;
+    --bg: #f4f6f5;
+    --card: #ffffff;
+    --text: #17201b;
+    --muted: #5d6b63;
+    --line: #dfe5e1;
+    --accent: #16a34a;
+    --accent-soft: #dcfce7;
+    --accent-text: #ffffff;
+    --warn: #b45309;
+    --warn-soft: #fef3c7;
+    --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1412;
+      --card: #18201c;
+      --text: #e8efea;
+      --muted: #94a39a;
+      --line: #2a3530;
+      --accent: #22c55e;
+      --accent-soft: #14361f;
+      --accent-text: #06210f;
+      --warn: #fbbf24;
+      --warn-soft: #3a2c0a;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1412;
+    --card: #18201c;
+    --text: #e8efea;
+    --muted: #94a39a;
+    --line: #2a3530;
+    --accent: #22c55e;
+    --accent-soft: #14361f;
+    --accent-text: #06210f;
+    --warn: #fbbf24;
+    --warn-soft: #3a2c0a;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 17px/1.6 var(--font-body);
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 16px 48px; display: grid; gap: 16px; }
+  h1, h2 { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .02em; text-wrap: balance; margin: 0; }
+  h1 { font-size: 2.6rem; line-height: 1; }
+  h2 { font-size: 1.4rem; line-height: 1.2; }
+  h3 { margin: 0; font-size: 1rem; }
+  p { margin: 0; }
+  .lead { color: var(--muted); max-width: 60ch; }
+  .hero { display: grid; gap: 12px; padding-bottom: 8px; }
+  .hero-top { display: flex; align-items: center; gap: 14px; }
+  .hero-top img { width: 56px; height: 56px; border-radius: 14px; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 10px 18px;
+    border-radius: 10px; font-weight: 700; text-decoration: none;
+    background: var(--accent); color: var(--accent-text);
+  }
+  .btn.secondary { background: var(--card); color: var(--text); border: 1px solid var(--line); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  section.card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 20px 16px; display: grid; gap: 12px;
+  }
+  .features { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .feature { background: var(--bg); border-radius: 12px; padding: 12px 14px; display: grid; gap: 2px; min-width: 0; }
+  .feature p { color: var(--muted); font-size: .95rem; }
+  .tag {
+    font: 700 .72rem/1 var(--font-body); text-transform: uppercase; letter-spacing: .06em;
+    color: var(--accent); background: var(--accent-soft); border-radius: 99px; padding: 4px 10px; justify-self: start;
+  }
+  ol.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 10px; }
+  ol.steps li { counter-increment: s; display: grid; grid-template-columns: 32px 1fr; gap: 10px; align-items: start; }
+  ol.steps li::before {
+    content: counter(s); width: 32px; height: 32px; border-radius: 50%;
+    display: grid; place-items: center; font: 700 1rem/1 var(--font-display);
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .platforms { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .platforms > div { display: grid; gap: 10px; min-width: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .table-wrap { overflow-x: auto; }
+  td:first-child code { white-space: nowrap; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; background: var(--bg); padding: 1px 6px; border-radius: 6px; overflow-wrap: anywhere; }
+  .note { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 12px 14px; font-size: .95rem; }
+  .muted { color: var(--muted); font-size: .95rem; }
+  footer { color: var(--muted); font-size: .85rem; text-align: center; padding-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-top">
+      <img src="icons/icon-192.png" alt="">
+      <h1>Fit &amp; Leicht</h1>
+    </div>
+    <p class="lead">Deine App zum Abnehmen mit Sport. Sie rechnet dein Kalorienziel aus, zeichnet deinen Gewichtsverlauf auf und gibt dir einen Trainingsplan. Sie läuft im Browser, lässt sich aufs Handy installieren und funktioniert danach auch ohne Internet.</p>
+    <div class="actions">
+      <a class="btn" href="index.html">App öffnen</a>
+      <a class="btn secondary" href="#installieren">Aufs Handy installieren</a>
+    </div>
+  </header>
+
+  <section class="card">
+    <h2>Was die App kann</h2>
+    <div class="features">
+      <div class="feature">
+        <span class="tag">Profil</span>
+        <h3>Kalorienrechner</h3>
+        <p>Grundumsatz und Gesamtbedarf nach Mifflin-St-Jeor, dein Tagesziel mit Defizit, Eiweiß- und Wasserziel.</p>
+      </div>
+      <div class="feature">
+        <span class="tag">Gewicht</span>
+        <h3>Verlauf &amp; BMI</h3>
+        <p>Tägliche Einträge, Kurve mit Ziellinie, BMI und dein Tempo in kg pro Woche.</p>
+      </div>
+      <div class="feature">
+        <span class="tag">Training</span>
+        <h3>Sport-Tagebuch</h3>
+        <p>19 Sportarten, geschätzter Kalorienverbrauch, Wochenminuten und Trainings-Serie.</p>
+      </div>
+      <div class="feature">
+        <span class="tag">Essen</span>
+        <h3>Ernährung &amp; Wasser</h3>
+        <p>Mahlzeiten mit Kalorien und Eiweiß, Schnell-Buttons und ein Wasser-Zähler in Gläsern.</p>
+      </div>
+      <div class="feature">
+        <span class="tag">Plan</span>
+        <h3>Wochenplan</h3>
+        <p>Trainingspläne für Einsteiger, Mittel und Profi. Jeden Tag abhaken, jeden Montag neu.</p>
+      </div>
+      <div class="feature">
+        <span class="tag">Offline</span>
+        <h3>Ohne Internet</h3>
+        <p>Nach dem ersten Öffnen ist die App auf dem Gerät gespeichert und läuft auch im Flugmodus.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="installieren">
+    <h2>Aufs Handy installieren</h2>
+    <p class="muted">Öffne die App einmal mit Internet. Danach liegt sie wie eine normale App auf deinem Startbildschirm.</p>
+    <div class="platforms">
+      <div>
+        <h3>iPhone (Safari)</h3>
+        <ol class="steps">
+          <li><span>Die App-Adresse in <strong>Safari</strong> öffnen.</span></li>
+          <li><span>Unten auf <strong>Teilen</strong> tippen (Quadrat mit Pfeil nach oben).</span></li>
+          <li><span><strong>„Zum Home-Bildschirm“</strong> wählen und auf <strong>Hinzufügen</strong> tippen.</span></li>
+        </ol>
+      </div>
+      <div>
+        <h3>Android (Chrome)</h3>
+        <ol class="steps">
+          <li><span>Die App-Adresse in <strong>Chrome</strong> öffnen.</span></li>
+          <li><span>Oben rechts auf das <strong>Drei-Punkte-Menü</strong> tippen.</span></li>
+          <li><span><strong>„App installieren“</strong> oder <strong>„Zum Startbildschirm hinzufügen“</strong> wählen.</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Offline benutzen</h2>
+    <p>Beim ersten Öffnen speichert die App alle ihre Dateien auf dem Gerät. Danach startet sie auch ohne Netz. Oben rechts zeigt sie dir, ob du gerade <strong>Online</strong> oder <strong>Offline</strong> bist. Deine Einträge werden in beiden Fällen sofort gespeichert.</p>
+    <p class="muted">Updates holt sich die App automatisch, sobald du wieder Internet hast. Die neue Version siehst du beim nächsten Start.</p>
+  </section>
+
+  <section class="card">
+    <h2>Deine Daten</h2>
+    <p>Alles bleibt auf deinem Gerät. Es gibt kein Konto, und nichts wird an einen Server geschickt. Daraus folgt:</p>
+    <ol class="steps">
+      <li><span>Handy und PC haben jeweils eigene Daten. Sie werden <strong>nicht</strong> automatisch abgeglichen.</span></li>
+      <li><span>Wenn du die Browserdaten löschst oder die App vom Startbildschirm entfernst, können die Einträge verloren gehen.</span></li>
+      <li><span>Lade deshalb unter <strong>Profil → Backup herunterladen</strong> ab und zu eine Sicherung herunter. Mit <strong>Backup laden</strong> holst du sie zurück, auch auf einem anderen Gerät.</span></li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>So wird gerechnet</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Wert</th><th>Formel</th></tr></thead>
+        <tbody>
+          <tr><td>Grundumsatz</td><td>10 × kg + 6,25 × cm − 5 × Alter + 5 (Mann) bzw. − 161 (Frau)</td></tr>
+          <tr><td>Gesamtbedarf</td><td>Grundumsatz × Aktivitätsfaktor (1,2 bis 1,9)</td></tr>
+          <tr><td>Tagesziel</td><td>Gesamtbedarf − 300 / 500 / 750 kcal, mindestens 1.500 kcal (Mann) bzw. 1.200 kcal (Frau)</td></tr>
+          <tr><td>Fett­verlust</td><td>ca. 7.700 kcal Defizit ≈ 1 kg</td></tr>
+          <tr><td>Training</td><td>MET-Wert × kg × Stunden</td></tr>
+          <tr><td>Eiweiß</td><td>1,6 g pro kg (bezogen auf höchstens BMI 25)</td></tr>
+          <tr><td>Wasser</td><td>35 ml pro kg Körpergewicht</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Alle Werte sind Schätzungen. Bei Vorerkrankungen, Schmerzen oder starkem Übergewicht sprich vor dem Start mit deiner Ärztin oder deinem Arzt.</p>
+  </section>
+
+  <section class="card">
+    <h2>Online stellen (einmalig)</h2>
+    <p>Damit du die App am Handy öffnen kannst, braucht sie eine Adresse im Internet. Das geht kostenlos mit GitHub Pages:</p>
+    <ol class="steps">
+      <li><span>Im Repository auf <strong>Settings → Pages</strong> gehen.</span></li>
+      <li><span>Bei <strong>Source</strong> „Deploy from a branch“ wählen, dann den Branch mit der App und den Ordner <code>/ (root)</code>. Auf <strong>Save</strong> klicken.</span></li>
+      <li><span>Nach etwa einer Minute erscheint dort die Adresse, z. B. <code>https://renator57.github.io/Sport/</code>. Diese am Handy öffnen und installieren.</span></li>
+    </ol>
+    <p class="muted">Der Offline-Modus braucht eine <code>https://</code>-Adresse. Wenn du <code>index.html</code> direkt als Datei öffnest, funktioniert die App, aber ohne Installation und ohne Offline-Modus.</p>
+  </section>
+
+  <section class="card">
+    <h2>Dateien</h2>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td><code>index.html</code></td><td>Die komplette App</td></tr>
+          <tr><td><code>README.html</code></td><td>Diese Anleitung</td></tr>
+          <tr><td><code>manifest.webmanifest</code></td><td>Name, Farben und Icons für die Installation</td></tr>
+          <tr><td><code>sw.js</code></td><td>Service Worker für den Offline-Modus. Bei Änderungen <code>VERSION</code> erhöhen.</td></tr>
+          <tr><td><code>icons/</code></td><td>App-Icons</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <a class="btn" href="index.html">Zur App</a>
+  </footer>
+
+</div>
+</body>
+</html>
