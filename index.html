@@ -1,0 +1,1189 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#16a34a">
+<title>Fit & Leicht</title>
+<style>
+  :root {
+    --bg: #f4f6f5;
+    --card: #ffffff;
+    --text: #17201b;
+    --muted: #5d6b63;
+    --line: #dfe5e1;
+    --accent: #16a34a;
+    --accent-soft: #dcfce7;
+    --accent-text: #ffffff;
+    --warn: #b45309;
+    --warn-soft: #fef3c7;
+    --danger: #dc2626;
+    --blue: #2563eb;
+    --blue-soft: #dbeafe;
+    --shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 16px rgba(0,0,0,.04);
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1412;
+      --card: #18201c;
+      --text: #e8efea;
+      --muted: #94a39a;
+      --line: #2a3530;
+      --accent: #22c55e;
+      --accent-soft: #14361f;
+      --accent-text: #06210f;
+      --warn: #fbbf24;
+      --warn-soft: #3a2c0a;
+      --danger: #f87171;
+      --blue: #60a5fa;
+      --blue-soft: #172a45;
+      --shadow: none;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding-bottom: 84px;
+  }
+  header {
+    padding: 20px 16px 8px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  header h1 { margin: 0; font-size: 1.6rem; letter-spacing: -.01em; }
+  header p { margin: 2px 0 0; color: var(--muted); }
+  main { max-width: 760px; margin: 0 auto; padding: 8px 16px; }
+  section.tab { display: none; }
+  section.tab.active { display: block; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .card h2 { margin: 0 0 10px; font-size: 1.1rem; }
+  .card h3 { margin: 14px 0 6px; font-size: 1rem; }
+  .muted { color: var(--muted); font-size: .9rem; }
+  .grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .stat {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 12px;
+  }
+  .stat .label { color: var(--muted); font-size: .8rem; }
+  .stat .value { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .stat .sub { font-size: .8rem; color: var(--muted); }
+  form .row { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-bottom: 10px; }
+  label { display: block; font-size: .85rem; color: var(--muted); margin-bottom: 4px; }
+  input, select {
+    width: 100%;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    min-height: 44px;
+  }
+  input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  button {
+    font: inherit;
+    font-weight: 600;
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 16px;
+    min-height: 44px;
+    background: var(--accent);
+    color: var(--accent-text);
+    cursor: pointer;
+  }
+  button.secondary { background: var(--bg); color: var(--text); border: 1px solid var(--line); }
+  button.icon { background: transparent; color: var(--muted); padding: 6px 10px; min-height: 36px; }
+  button.icon:hover { color: var(--danger); }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .bar { height: 12px; background: var(--bg); border-radius: 99px; overflow: hidden; }
+  .bar > div { height: 100%; background: var(--accent); border-radius: 99px; transition: width .4s; }
+  .bar.blue > div { background: var(--blue); }
+  .bar.over > div { background: var(--danger); }
+  ul.list { list-style: none; margin: 0; padding: 0; }
+  ul.list li {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid var(--line);
+  }
+  ul.list li:last-child { border-bottom: 0; }
+  ul.list .grow { flex: 1; min-width: 0; }
+  ul.list .title { font-weight: 600; overflow-wrap: anywhere; }
+  .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pill {
+    display: inline-block; padding: 2px 10px; border-radius: 99px;
+    font-size: .8rem; font-weight: 600; background: var(--accent-soft); color: var(--accent);
+  }
+  .pill.warn { background: var(--warn-soft); color: var(--warn); }
+  .pill.blue { background: var(--blue-soft); color: var(--blue); }
+  .note { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; margin-top: 10px; }
+  .empty { color: var(--muted); text-align: center; padding: 16px 0; }
+  .chart-wrap { width: 100%; overflow: hidden; }
+  .chart-wrap svg { width: 100%; height: auto; display: block; }
+  .water { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .glass {
+    width: 34px; height: 42px; border-radius: 4px 4px 10px 10px;
+    border: 2px solid var(--blue); background: transparent; padding: 0; min-height: 0;
+  }
+  .glass.full { background: var(--blue); }
+  .day { border-bottom: 1px solid var(--line); padding: 10px 0; }
+  .day:last-child { border-bottom: 0; }
+  .day-head { display: flex; align-items: center; gap: 10px; }
+  .day-head input[type=checkbox] { width: 24px; height: 24px; min-height: 0; accent-color: var(--accent); flex: none; }
+  .day-head .grow { flex: 1; }
+  .day.done .day-title { text-decoration: line-through; color: var(--muted); }
+  .day.today { background: var(--accent-soft); margin: 0 -16px; padding: 10px 16px; }
+  .day ul { margin: 6px 0 0 34px; padding-left: 16px; color: var(--muted); font-size: .9rem; }
+  nav.tabs {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: var(--card); border-top: 1px solid var(--line);
+    display: flex; justify-content: center;
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 10;
+  }
+  nav.tabs .inner { display: flex; width: 100%; max-width: 760px; }
+  nav.tabs button {
+    flex: 1; background: transparent; color: var(--muted);
+    border-radius: 0; padding: 8px 2px; min-height: 60px;
+    font-size: .72rem; font-weight: 600;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  nav.tabs button svg { width: 22px; height: 22px; }
+  nav.tabs button.active { color: var(--accent); }
+  .tip { border-left: 4px solid var(--accent); padding: 4px 0 4px 12px; margin: 10px 0; }
+  .tip strong { display: block; }
+  .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+  .seg button { flex: 1; min-width: 90px; }
+  .seg button.secondary.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Fit &amp; Leicht</h1>
+  <p id="greeting">Dein persönlicher Abnehm-Begleiter</p>
+</header>
+
+<main>
+
+  <!-- ============ ÜBERSICHT ============ -->
+  <section class="tab active" id="tab-home">
+    <div class="card" id="setup-hint" hidden>
+      <h2>Willkommen! 👋</h2>
+      <p>Trag zuerst unter <strong>Profil</strong> deine Daten ein. Dann berechne ich deinen Kalorienbedarf, dein Tagesziel und wie lange es bis zu deinem Wunschgewicht dauert.</p>
+      <button data-goto="profile">Profil anlegen</button>
+    </div>
+
+    <div class="card">
+      <h2>Heute</h2>
+      <div class="grid">
+        <div class="stat">
+          <div class="label">Noch verfügbar</div>
+          <div class="value" id="h-remaining">–</div>
+          <div class="sub">kcal</div>
+        </div>
+        <div class="stat">
+          <div class="label">Gegessen</div>
+          <div class="value" id="h-eaten">0</div>
+          <div class="sub" id="h-target">Ziel: –</div>
+        </div>
+        <div class="stat">
+          <div class="label">Verbrannt (Sport)</div>
+          <div class="value" id="h-burned">0</div>
+          <div class="sub" id="h-minutes">0 Min. Training</div>
+        </div>
+        <div class="stat">
+          <div class="label">Wasser</div>
+          <div class="value" id="h-water">0 l</div>
+          <div class="sub" id="h-water-goal">Ziel: –</div>
+        </div>
+      </div>
+      <h3>Kalorien</h3>
+      <div class="bar" id="h-cal-bar"><div style="width:0"></div></div>
+      <p class="muted" id="h-cal-text"></p>
+    </div>
+
+    <div class="card">
+      <h2>Fortschritt</h2>
+      <div class="grid">
+        <div class="stat">
+          <div class="label">Aktuelles Gewicht</div>
+          <div class="value" id="h-weight">–</div>
+          <div class="sub" id="h-weight-date"></div>
+        </div>
+        <div class="stat">
+          <div class="label">Schon abgenommen</div>
+          <div class="value" id="h-lost">–</div>
+          <div class="sub" id="h-lost-sub"></div>
+        </div>
+        <div class="stat">
+          <div class="label">Noch bis zum Ziel</div>
+          <div class="value" id="h-togo">–</div>
+          <div class="sub" id="h-eta"></div>
+        </div>
+        <div class="stat">
+          <div class="label">Trainings-Serie</div>
+          <div class="value" id="h-streak">0</div>
+          <div class="sub">Tage in Folge</div>
+        </div>
+      </div>
+      <h3>Weg zum Wunschgewicht</h3>
+      <div class="bar"><div id="h-goal-bar" style="width:0"></div></div>
+      <p class="muted" id="h-goal-text"></p>
+    </div>
+
+    <div class="card">
+      <h2>Tipp des Tages</h2>
+      <div class="tip" id="h-tip"></div>
+    </div>
+  </section>
+
+  <!-- ============ GEWICHT ============ -->
+  <section class="tab" id="tab-weight">
+    <div class="card">
+      <h2>Gewicht eintragen</h2>
+      <form id="weight-form">
+        <div class="row">
+          <div>
+            <label for="w-date">Datum</label>
+            <input type="date" id="w-date" required>
+          </div>
+          <div>
+            <label for="w-value">Gewicht (kg)</label>
+            <input type="number" id="w-value" step="0.1" min="30" max="300" inputmode="decimal" required>
+          </div>
+        </div>
+        <button type="submit">Speichern</button>
+      </form>
+      <p class="muted">Tipp: Wiege dich immer zur gleichen Zeit – am besten morgens nach dem Aufstehen.</p>
+    </div>
+
+    <div class="card">
+      <h2>Verlauf</h2>
+      <div class="chart-wrap" id="weight-chart"></div>
+      <div class="grid" style="margin-top:12px">
+        <div class="stat">
+          <div class="label">BMI</div>
+          <div class="value" id="w-bmi">–</div>
+          <div class="sub" id="w-bmi-cat"></div>
+        </div>
+        <div class="stat">
+          <div class="label">Tempo (letzte 4 Wochen)</div>
+          <div class="value" id="w-rate">–</div>
+          <div class="sub">kg pro Woche</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Einträge</h2>
+      <ul class="list" id="weight-list"></ul>
+    </div>
+  </section>
+
+  <!-- ============ TRAINING ============ -->
+  <section class="tab" id="tab-train">
+    <div class="card">
+      <h2>Training eintragen</h2>
+      <form id="workout-form">
+        <div class="row">
+          <div>
+            <label for="t-type">Sportart</label>
+            <select id="t-type"></select>
+          </div>
+          <div>
+            <label for="t-min">Dauer (Minuten)</label>
+            <input type="number" id="t-min" min="1" max="600" inputmode="numeric" required>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="t-date">Datum</label>
+            <input type="date" id="t-date" required>
+          </div>
+          <div>
+            <label>Geschätzter Verbrauch</label>
+            <input type="text" id="t-est" readonly tabindex="-1" value="–">
+          </div>
+        </div>
+        <button type="submit">Training speichern</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Diese Woche</h2>
+      <div class="grid">
+        <div class="stat">
+          <div class="label">Einheiten</div>
+          <div class="value" id="t-week-count">0</div>
+        </div>
+        <div class="stat">
+          <div class="label">Minuten</div>
+          <div class="value" id="t-week-min">0</div>
+          <div class="sub">Empfehlung: 150+</div>
+        </div>
+        <div class="stat">
+          <div class="label">Verbrannt</div>
+          <div class="value" id="t-week-kcal">0</div>
+          <div class="sub">kcal</div>
+        </div>
+      </div>
+      <h3>WHO-Empfehlung: 150 Min. pro Woche</h3>
+      <div class="bar"><div id="t-week-bar" style="width:0"></div></div>
+    </div>
+
+    <div class="card">
+      <h2>Letzte Trainings</h2>
+      <ul class="list" id="workout-list"></ul>
+    </div>
+  </section>
+
+  <!-- ============ ERNÄHRUNG ============ -->
+  <section class="tab" id="tab-food">
+    <div class="card">
+      <h2>Mahlzeit eintragen</h2>
+      <form id="food-form">
+        <div class="row">
+          <div>
+            <label for="f-name">Was hast du gegessen?</label>
+            <input type="text" id="f-name" maxlength="60" placeholder="z. B. Haferflocken mit Beeren" required>
+          </div>
+          <div>
+            <label for="f-kcal">Kalorien (kcal)</label>
+            <input type="number" id="f-kcal" min="0" max="5000" inputmode="numeric" required>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="f-meal">Mahlzeit</label>
+            <select id="f-meal">
+              <option>Frühstück</option>
+              <option>Mittagessen</option>
+              <option>Abendessen</option>
+              <option>Snack</option>
+            </select>
+          </div>
+          <div>
+            <label for="f-protein">Eiweiß (g, optional)</label>
+            <input type="number" id="f-protein" min="0" max="500" inputmode="numeric">
+          </div>
+        </div>
+        <button type="submit">Hinzufügen</button>
+      </form>
+      <h3>Schnell hinzufügen</h3>
+      <div class="actions" id="quick-foods"></div>
+    </div>
+
+    <div class="card">
+      <h2>Wasser</h2>
+      <p class="muted">Ein Glas = 250 ml. Tippe auf ein Glas, um es zu füllen.</p>
+      <div class="water" id="water"></div>
+      <p class="muted" id="water-text"></p>
+    </div>
+
+    <div class="card">
+      <h2>Heute gegessen</h2>
+      <div class="grid" style="margin-bottom:10px">
+        <div class="stat">
+          <div class="label">Kalorien</div>
+          <div class="value" id="f-total">0</div>
+          <div class="sub" id="f-total-sub"></div>
+        </div>
+        <div class="stat">
+          <div class="label">Eiweiß</div>
+          <div class="value" id="f-protein-total">0 g</div>
+          <div class="sub" id="f-protein-sub"></div>
+        </div>
+      </div>
+      <ul class="list" id="food-list"></ul>
+    </div>
+  </section>
+
+  <!-- ============ PLAN ============ -->
+  <section class="tab" id="tab-plan">
+    <div class="card">
+      <h2>Wochenplan</h2>
+      <p class="muted">Wähle dein Level. Hake jeden Tag ab, den du geschafft hast – jeden Montag beginnt eine neue Woche.</p>
+      <div class="seg" id="plan-level"></div>
+      <h3 id="plan-progress"></h3>
+      <div class="bar"><div id="plan-bar" style="width:0"></div></div>
+    </div>
+    <div class="card" id="plan-days"></div>
+    <div class="card">
+      <h2>So funktioniert's</h2>
+      <p><strong>Kaloriendefizit:</strong> Du nimmst ab, wenn du weniger Energie aufnimmst als du verbrauchst. Rund 7.700 kcal entsprechen etwa 1 kg Körperfett.</p>
+      <p><strong>Krafttraining:</strong> Erhält deine Muskeln beim Abnehmen und erhöht deinen Grundumsatz.</p>
+      <p><strong>Ausdauer:</strong> Verbrennt zusätzlich Kalorien und stärkt Herz und Kreislauf.</p>
+      <p><strong>Alltagsbewegung:</strong> 8.000–10.000 Schritte am Tag machen einen großen Unterschied.</p>
+      <p class="muted">Bei Vorerkrankungen, Schmerzen oder starkem Übergewicht sprich vor dem Start mit deiner Ärztin oder deinem Arzt.</p>
+    </div>
+  </section>
+
+  <!-- ============ PROFIL ============ -->
+  <section class="tab" id="tab-profile">
+    <div class="card">
+      <h2>Mein Profil</h2>
+      <form id="profile-form">
+        <div class="row">
+          <div>
+            <label for="p-name">Name (optional)</label>
+            <input type="text" id="p-name" maxlength="30">
+          </div>
+          <div>
+            <label for="p-sex">Geschlecht</label>
+            <select id="p-sex">
+              <option value="m">männlich</option>
+              <option value="f">weiblich</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="p-age">Alter</label>
+            <input type="number" id="p-age" min="14" max="100" inputmode="numeric" required>
+          </div>
+          <div>
+            <label for="p-height">Größe (cm)</label>
+            <input type="number" id="p-height" min="120" max="230" inputmode="numeric" required>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="p-start">Startgewicht (kg)</label>
+            <input type="number" id="p-start" step="0.1" min="30" max="300" inputmode="decimal" required>
+          </div>
+          <div>
+            <label for="p-goal">Wunschgewicht (kg)</label>
+            <input type="number" id="p-goal" step="0.1" min="30" max="300" inputmode="decimal" required>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="p-activity">Aktivität im Alltag</label>
+            <select id="p-activity">
+              <option value="1.2">Kaum aktiv (Büro, wenig Bewegung)</option>
+              <option value="1.375">Leicht aktiv (1–3× Sport/Woche)</option>
+              <option value="1.55">Mäßig aktiv (3–5× Sport/Woche)</option>
+              <option value="1.725">Sehr aktiv (6–7× Sport/Woche)</option>
+              <option value="1.9">Extrem aktiv (körperliche Arbeit + Sport)</option>
+            </select>
+          </div>
+          <div>
+            <label for="p-pace">Abnehm-Tempo</label>
+            <select id="p-pace">
+              <option value="300">Sanft (−300 kcal/Tag, ca. 0,3 kg/Woche)</option>
+              <option value="500" selected>Normal (−500 kcal/Tag, ca. 0,5 kg/Woche)</option>
+              <option value="750">Zügig (−750 kcal/Tag, ca. 0,7 kg/Woche)</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit">Profil speichern</button>
+      </form>
+    </div>
+
+    <div class="card" id="calc-card" hidden>
+      <h2>Deine Werte</h2>
+      <div class="grid">
+        <div class="stat">
+          <div class="label">Grundumsatz</div>
+          <div class="value" id="c-bmr">–</div>
+          <div class="sub">kcal in Ruhe</div>
+        </div>
+        <div class="stat">
+          <div class="label">Gesamtbedarf</div>
+          <div class="value" id="c-tdee">–</div>
+          <div class="sub">kcal pro Tag</div>
+        </div>
+        <div class="stat">
+          <div class="label">Dein Tagesziel</div>
+          <div class="value" id="c-target">–</div>
+          <div class="sub">kcal zum Abnehmen</div>
+        </div>
+        <div class="stat">
+          <div class="label">Eiweiß-Ziel</div>
+          <div class="value" id="c-protein">–</div>
+          <div class="sub">g pro Tag</div>
+        </div>
+      </div>
+      <p class="muted" id="c-explain"></p>
+      <div class="note" id="c-warn" hidden></div>
+    </div>
+
+    <div class="card">
+      <h2>Daten sichern</h2>
+      <p class="muted">Deine Daten werden nur in diesem Browser gespeichert. Mach ab und zu ein Backup, damit nichts verloren geht.</p>
+      <div class="actions">
+        <button class="secondary" id="export-btn" type="button">Backup herunterladen</button>
+        <button class="secondary" id="import-btn" type="button">Backup laden</button>
+        <input type="file" id="import-file" accept="application/json" hidden>
+        <button class="secondary" id="reset-btn" type="button" style="color:var(--danger)">Alles löschen</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<nav class="tabs" aria-label="Navigation">
+  <div class="inner">
+    <button data-tab="home" class="active" aria-label="Übersicht">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      Übersicht
+    </button>
+    <button data-tab="weight" aria-label="Gewicht">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+      Gewicht
+    </button>
+    <button data-tab="train" aria-label="Training">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6v12M18 6v12M3 9v6M21 9v6M6 12h12"/></svg>
+      Training
+    </button>
+    <button data-tab="food" aria-label="Ernährung">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v8a2 2 0 0 0 4 0V3M9 11v10"/><path d="M17 21V3c-2 0-3 3-3 7h3"/></svg>
+      Essen
+    </button>
+    <button data-tab="plan" aria-label="Plan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg>
+      Plan
+    </button>
+    <button data-tab="profile" aria-label="Profil">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      Profil
+    </button>
+  </div>
+</nav>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------- Konstanten ----------
+  const STORE_KEY = 'fit-leicht-v1';
+  const KCAL_PER_KG = 7700;
+
+  // MET-Werte (Metabolisches Äquivalent) für die Kalorienschätzung
+  const ACTIVITIES = [
+    ['Spazierengehen', 3.5],
+    ['Zügiges Gehen / Walking', 4.3],
+    ['Nordic Walking', 5.0],
+    ['Joggen (ca. 8 km/h)', 8.3],
+    ['Laufen (ca. 10 km/h)', 9.8],
+    ['Radfahren (gemütlich)', 5.8],
+    ['Radfahren (zügig)', 8.0],
+    ['Schwimmen', 6.0],
+    ['Krafttraining', 5.0],
+    ['Bodyweight / Zirkeltraining', 6.0],
+    ['HIIT', 8.0],
+    ['Seilspringen', 11.0],
+    ['Crosstrainer', 5.0],
+    ['Rudergerät', 7.0],
+    ['Wandern', 6.0],
+    ['Fußball', 7.0],
+    ['Tanzen', 5.0],
+    ['Yoga / Dehnen', 2.5],
+    ['Treppensteigen', 8.0]
+  ];
+
+  const QUICK_FOODS = [
+    ['Apfel', 70, 0], ['Banane', 105, 1], ['Ei (gekocht)', 80, 7],
+    ['Magerquark 250 g', 170, 30], ['Haferflocken 50 g', 185, 7],
+    ['Hähnchenbrust 150 g', 165, 35], ['Vollkornbrot (Scheibe)', 110, 4],
+    ['Kaffee mit Milch', 30, 1], ['Proteinshake', 120, 24]
+  ];
+
+  const PLANS = {
+    beginner: {
+      label: 'Einsteiger',
+      days: [
+        ['Ganzkörper-Kraft', ['3 Runden: 10 Kniebeugen, 8 Liegestütze (gerne an der Wand/Knie), 10 Ausfallschritte je Seite', '20 Sek. Unterarmstütz (Plank)', '60–90 Sek. Pause zwischen den Runden']],
+        ['Zügiges Gehen', ['30 Min. zügig gehen – du solltest noch reden, aber nicht singen können']],
+        ['Ruhetag', ['Locker dehnen, Spaziergang, viel trinken']],
+        ['Ganzkörper-Kraft', ['3 Runden: 12 Kniebeugen, 10 Glute Bridges, 8 Liegestütze, 10 Rudern mit Wasserflaschen', '25 Sek. Plank']],
+        ['Ausdauer', ['30 Min. Radfahren, Schwimmen oder Crosstrainer']],
+        ['Aktive Erholung', ['20 Min. Yoga oder Mobility', '8.000 Schritte']],
+        ['Langer Spaziergang', ['45–60 Min. Spazieren oder Wandern']]
+      ]
+    },
+    medium: {
+      label: 'Mittel',
+      days: [
+        ['Kraft Unterkörper', ['4×12 Kniebeugen', '3×10 Ausfallschritte je Seite', '3×15 Glute Bridges', '3×30 Sek. Wandsitzen']],
+        ['Intervall-Lauf', ['5 Min. Aufwärmen', '8× (1 Min. schnell / 1 Min. locker)', '5 Min. Auslaufen']],
+        ['Kraft Oberkörper', ['4×10 Liegestütze', '4×12 Rudern', '3×10 Schulterdrücken', '3×40 Sek. Plank']],
+        ['Ausdauer locker', ['40 Min. Joggen, Radfahren oder Schwimmen im Wohlfühltempo']],
+        ['Ganzkörper-Zirkel', ['4 Runden: 15 Kniebeugen, 12 Liegestütze, 20 Mountain Climbers, 10 Burpees', '1 Min. Pause pro Runde']],
+        ['Aktive Erholung', ['30 Min. Yoga oder Dehnen', '10.000 Schritte']],
+        ['Ruhetag', ['Erholung – Muskeln wachsen in der Pause']]
+      ]
+    },
+    advanced: {
+      label: 'Profi',
+      days: [
+        ['HIIT', ['10 Runden: 40 Sek. Belastung / 20 Sek. Pause', 'Burpees, Jump Squats, Mountain Climbers, Seilspringen, High Knees']],
+        ['Kraft Unterkörper', ['5×10 Kniebeugen (mit Gewicht)', '4×10 Kreuzheben', '4×12 Bulgarian Split Squats je Seite', '3×15 Wadenheben']],
+        ['Lauf 45 Min.', ['45 Min. gleichmäßiges Tempo, am Ende 5 Min. Steigerung']],
+        ['Kraft Oberkörper', ['5×8 Klimmzüge oder Latzug', '4×10 Bankdrücken / Liegestütze mit Gewicht', '4×12 Rudern', '3×60 Sek. Plank']],
+        ['Intervall-Lauf', ['6× 400 m schnell, 200 m Trabpause']],
+        ['Ganzkörper + Core', ['4 Runden: 12 Thruster, 10 Ruderzüge je Seite, 15 Russian Twists, 12 Beinheben']],
+        ['Ruhetag / Mobility', ['30 Min. Mobility, Faszienrolle, Spaziergang']]
+      ]
+    }
+  };
+
+  const TIPS = [
+    ['Eiweiß zu jeder Mahlzeit', 'Eiweiß macht lange satt und schützt deine Muskeln beim Abnehmen.'],
+    ['Trink vor dem Essen ein Glas Wasser', 'Das hilft, Hunger und Durst zu unterscheiden.'],
+    ['Gemüse zuerst', 'Fülle die Hälfte deines Tellers mit Gemüse – viel Volumen, wenig Kalorien.'],
+    ['Schlaf ist Training', 'Wer 7–9 Stunden schläft, hat weniger Heißhunger.'],
+    ['Flüssige Kalorien meiden', 'Softdrinks, Säfte und Alkohol liefern viele Kalorien ohne satt zu machen.'],
+    ['Schritte zählen', 'Jeder Spaziergang zählt. 10.000 Schritte verbrennen grob 300–400 kcal.'],
+    ['Gewicht schwankt', 'Tägliche Schwankungen von 1–2 kg sind normal (Wasser, Salz). Achte auf den Trend.'],
+    ['Plane deine Mahlzeiten', 'Wer vorkocht, greift seltener zu Fast Food.'],
+    ['Langsam essen', 'Das Sättigungsgefühl kommt erst nach etwa 20 Minuten.'],
+    ['Krafttraining nicht vergessen', 'Muskeln verbrauchen auch in Ruhe Energie.'],
+    ['Kleine Ziele setzen', 'Feiere jedes verlorene Kilo – nicht nur das Endziel.'],
+    ['Kein Alles-oder-nichts', 'Ein Ausrutscher ist kein Grund aufzugeben. Die nächste Mahlzeit zählt.']
+  ];
+
+  // ---------- Hilfsfunktionen ----------
+  const $ = (id) => document.getElementById(id);
+  const pad = (n) => String(n).padStart(2, '0');
+  const dateKey = (d) => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const today = () => dateKey(new Date());
+  const parseKey = (k) => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+  const fmt = (n, digits = 0) => Number(n).toLocaleString('de-DE', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+  const fmtDate = (k) => parseKey(k).toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: '2-digit' });
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  function mondayOf(d) {
+    const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const day = (x.getDay() + 6) % 7; // Montag = 0
+    x.setDate(x.getDate() - day);
+    return x;
+  }
+
+  function el(tag, attrs, children) {
+    const n = document.createElement(tag);
+    if (attrs) for (const k in attrs) {
+      if (k === 'text') n.textContent = attrs[k];
+      else if (k === 'class') n.className = attrs[k];
+      else if (k.startsWith('on')) n.addEventListener(k.slice(2), attrs[k]);
+      else n.setAttribute(k, attrs[k]);
+    }
+    (children || []).forEach((c) => c && n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c));
+    return n;
+  }
+
+  // ---------- Speicher ----------
+  const emptyState = () => ({ profile: null, weights: [], workouts: [], foods: [], water: {}, plan: { level: 'beginner', done: {} } });
+  let state = emptyState();
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (raw) state = Object.assign(emptyState(), JSON.parse(raw));
+    } catch (e) { /* Speicher nicht verfügbar – App läuft trotzdem */ }
+  }
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* ignorieren */ }
+    render();
+  }
+
+  // ---------- Berechnungen ----------
+  function currentWeight() {
+    if (state.weights.length) return [...state.weights].sort((a, b) => a.date.localeCompare(b.date)).at(-1).kg;
+    return state.profile ? state.profile.start : null;
+  }
+
+  function calc() {
+    const p = state.profile;
+    if (!p) return null;
+    const w = currentWeight();
+    const bmr = 10 * w + 6.25 * p.height - 5 * p.age + (p.sex === 'm' ? 5 : -161);
+    const tdee = bmr * p.activity;
+    const minKcal = p.sex === 'm' ? 1500 : 1200;
+    const raw = tdee - p.pace;
+    const target = Math.max(raw, minKcal);
+    const deficit = tdee - target;
+    const bmi = w / Math.pow(p.height / 100, 2);
+    const protein = Math.round(Math.min(w, 25 * Math.pow(p.height / 100, 2)) * 1.6);
+    const water = Math.round(w * 35 / 250) * 250; // ml
+    return { w, bmr, tdee, target, deficit, capped: raw < minKcal, minKcal, bmi, protein, water };
+  }
+
+  function bmiCategory(b) {
+    if (b < 18.5) return 'Untergewicht';
+    if (b < 25) return 'Normalgewicht';
+    if (b < 30) return 'Übergewicht';
+    return 'Adipositas';
+  }
+
+  function workoutKcal(met, minutes, kg) {
+    return Math.round(met * (kg || 75) * (minutes / 60));
+  }
+
+  function streak() {
+    const days = new Set(state.workouts.map((w) => w.date));
+    let n = 0;
+    const d = new Date();
+    if (!days.has(dateKey(d))) d.setDate(d.getDate() - 1); // Heute zählt noch nicht als verpasst
+    while (days.has(dateKey(d))) { n++; d.setDate(d.getDate() - 1); }
+    return n;
+  }
+
+  function weeklyRate() {
+    const ws = [...state.weights].sort((a, b) => a.date.localeCompare(b.date));
+    if (ws.length < 2) return null;
+    const last = ws.at(-1);
+    const cutoff = parseKey(last.date); cutoff.setDate(cutoff.getDate() - 28);
+    const first = ws.find((w) => parseKey(w.date) >= cutoff) || ws[0];
+    const days = (parseKey(last.date) - parseKey(first.date)) / 864e5;
+    if (days < 1) return null;
+    return (last.kg - first.kg) / days * 7;
+  }
+
+  // ---------- Rendering ----------
+  function render() {
+    renderHome();
+    renderWeight();
+    renderWorkouts();
+    renderFood();
+    renderPlan();
+    renderProfile();
+  }
+
+  function renderHome() {
+    const c = calc();
+    const p = state.profile;
+    const t = today();
+    $('setup-hint').hidden = !!p;
+    $('greeting').textContent = p && p.name ? 'Hallo ' + p.name + ', bleib dran! 💪' : 'Dein persönlicher Abnehm-Begleiter';
+
+    const eaten = state.foods.filter((f) => f.date === t).reduce((s, f) => s + f.kcal, 0);
+    const todayWorkouts = state.workouts.filter((w) => w.date === t);
+    const burned = todayWorkouts.reduce((s, w) => s + w.kcal, 0);
+    const minutes = todayWorkouts.reduce((s, w) => s + w.min, 0);
+    $('h-eaten').textContent = fmt(eaten);
+    $('h-burned').textContent = fmt(burned);
+    $('h-minutes').textContent = fmt(minutes) + ' Min. Training';
+
+    const glasses = state.water[t] || 0;
+    $('h-water').textContent = fmt(glasses * 0.25, 2).replace(/,?0+$/, '') + ' l';
+    $('h-water-goal').textContent = c ? 'Ziel: ' + fmt(c.water / 1000, 1) + ' l' : 'Ziel: –';
+
+    const bar = $('h-cal-bar');
+    if (c) {
+      const budget = c.target + burned;
+      const remaining = budget - eaten;
+      $('h-remaining').textContent = fmt(remaining);
+      $('h-remaining').style.color = remaining < 0 ? 'var(--danger)' : '';
+      $('h-target').textContent = 'Ziel: ' + fmt(c.target) + ' kcal';
+      bar.firstElementChild.style.width = clamp(eaten / budget * 100, 0, 100) + '%';
+      bar.classList.toggle('over', remaining < 0);
+      $('h-cal-text').textContent = remaining >= 0
+        ? fmt(c.target) + ' kcal Tagesziel + ' + fmt(burned) + ' kcal durch Sport − ' + fmt(eaten) + ' kcal gegessen'
+        : 'Du liegst heute ' + fmt(-remaining) + ' kcal über deinem Ziel. Kein Problem – ein Spaziergang hilft, morgen geht\'s weiter.';
+    } else {
+      $('h-remaining').textContent = '–';
+      $('h-target').textContent = 'Ziel: –';
+      $('h-cal-text').textContent = 'Lege ein Profil an, um dein Kalorienziel zu sehen.';
+    }
+
+    const w = currentWeight();
+    const lastW = [...state.weights].sort((a, b) => a.date.localeCompare(b.date)).at(-1);
+    $('h-weight').textContent = w ? fmt(w, 1) + ' kg' : '–';
+    $('h-weight-date').textContent = lastW ? 'am ' + fmtDate(lastW.date) : (p ? 'Startgewicht' : '');
+    if (p) {
+      const lost = p.start - w;
+      const total = p.start - p.goal;
+      const togo = w - p.goal;
+      $('h-lost').textContent = (lost >= 0 ? '' : '+') + fmt(Math.abs(lost), 1) + ' kg';
+      $('h-lost-sub').textContent = lost >= 0 ? 'seit dem Start' : 'zugenommen seit Start';
+      $('h-togo').textContent = togo > 0 ? fmt(togo, 1) + ' kg' : 'Geschafft! 🎉';
+      if (togo > 0 && c && c.deficit > 0) {
+        const days = Math.ceil(togo * KCAL_PER_KG / c.deficit);
+        const eta = new Date(); eta.setDate(eta.getDate() + days);
+        $('h-eta').textContent = 'ca. ' + eta.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' }) + ' (' + Math.ceil(days / 7) + ' Wochen)';
+      } else $('h-eta').textContent = '';
+      const pct = total > 0 ? clamp(lost / total * 100, 0, 100) : 100;
+      $('h-goal-bar').style.width = pct + '%';
+      $('h-goal-text').textContent = fmt(pct) + ' % geschafft · Start ' + fmt(p.start, 1) + ' kg → Ziel ' + fmt(p.goal, 1) + ' kg';
+    } else {
+      ['h-lost', 'h-togo'].forEach((id) => { $(id).textContent = '–'; });
+      $('h-lost-sub').textContent = ''; $('h-eta').textContent = ''; $('h-goal-text').textContent = '';
+      $('h-goal-bar').style.width = '0';
+    }
+    $('h-streak').textContent = streak();
+
+    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 864e5);
+    const tip = TIPS[dayOfYear % TIPS.length];
+    $('h-tip').replaceChildren(el('strong', { text: tip[0] }), document.createTextNode(tip[1]));
+  }
+
+  function renderWeight() {
+    const list = $('weight-list');
+    const ws = [...state.weights].sort((a, b) => b.date.localeCompare(a.date));
+    list.replaceChildren();
+    if (!ws.length) list.appendChild(el('li', { class: 'empty', text: 'Noch keine Einträge.' }));
+    ws.forEach((w, i) => {
+      const prev = ws[i + 1];
+      const diff = prev ? w.kg - prev.kg : null;
+      list.appendChild(el('li', null, [
+        el('div', { class: 'grow' }, [el('div', { class: 'title', text: fmtDate(w.date) })]),
+        diff !== null ? el('span', { class: 'pill ' + (diff > 0 ? 'warn' : ''), text: (diff > 0 ? '+' : diff < 0 ? '−' : '±') + fmt(Math.abs(diff), 1) }) : null,
+        el('span', { class: 'num', text: fmt(w.kg, 1) + ' kg' }),
+        el('button', { class: 'icon', 'aria-label': 'Löschen', text: '✕', onclick: () => { state.weights = state.weights.filter((x) => x.id !== w.id); save(); } })
+      ]));
+    });
+
+    const c = calc();
+    $('w-bmi').textContent = c ? fmt(c.bmi, 1) : '–';
+    $('w-bmi-cat').textContent = c ? bmiCategory(c.bmi) : '';
+    const r = weeklyRate();
+    $('w-rate').textContent = r === null ? '–' : (r > 0 ? '+' : r < 0 ? '−' : '') + fmt(Math.abs(r), 2);
+    drawChart();
+  }
+
+  function drawChart() {
+    const box = $('weight-chart');
+    const ws = [...state.weights].sort((a, b) => a.date.localeCompare(b.date));
+    const p = state.profile;
+    if (ws.length < 2) {
+      box.replaceChildren(el('p', { class: 'empty', text: 'Ab zwei Einträgen siehst du hier deine Kurve.' }));
+      return;
+    }
+    const W = 400, H = 220, L = 40, R = 8, T = 14, B = 26;
+    const xs = ws.map((w) => parseKey(w.date).getTime());
+    const vals = ws.map((w) => w.kg);
+    if (p) vals.push(p.goal);
+    let min = Math.min(...vals), max = Math.max(...vals);
+    const padV = Math.max(0.5, (max - min) * 0.1);
+    min = Math.floor(min - padV); max = Math.ceil(max + padV);
+    const x0 = xs[0], x1 = Math.max(xs.at(-1), x0 + 864e5);
+    const sx = (x) => L + (x - x0) / (x1 - x0) * (W - L - R);
+    const sy = (v) => T + (max - v) / (max - min) * (H - T - B);
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'Gewichtsverlauf');
+    const add = (tag, attrs, text) => {
+      const n = document.createElementNS(ns, tag);
+      for (const k in attrs) n.setAttribute(k, attrs[k]);
+      if (text !== undefined) n.textContent = text;
+      svg.appendChild(n); return n;
+    };
+    const steps = 4;
+    for (let i = 0; i <= steps; i++) {
+      const v = min + (max - min) * i / steps;
+      const y = sy(v);
+      add('line', { x1: L, x2: W - R, y1: y, y2: y, stroke: 'var(--line)', 'stroke-width': 1 });
+      add('text', { x: L - 6, y: y + 4, 'text-anchor': 'end', 'font-size': 12, fill: 'var(--muted)' }, fmt(v, 1));
+    }
+    [0, ws.length - 1].forEach((i) => {
+      add('text', { x: sx(xs[i]), y: H - 8, 'text-anchor': i ? 'end' : 'start', 'font-size': 12, fill: 'var(--muted)' },
+        parseKey(ws[i].date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }));
+    });
+    if (p) {
+      const gy = sy(p.goal);
+      add('line', { x1: L, x2: W - R, y1: gy, y2: gy, stroke: 'var(--blue)', 'stroke-width': 1.5, 'stroke-dasharray': '6 5' });
+      add('text', { x: W - R, y: gy - 6, 'text-anchor': 'end', 'font-size': 12, fill: 'var(--blue)' }, 'Ziel ' + fmt(p.goal, 1) + ' kg');
+    }
+    const pts = ws.map((w, i) => sx(xs[i]) + ',' + sy(w.kg)).join(' ');
+    add('polygon', { points: `${sx(xs[0])},${H - B} ${pts} ${sx(xs.at(-1))},${H - B}`, fill: 'var(--accent)', opacity: 0.12 });
+    add('polyline', { points: pts, fill: 'none', stroke: 'var(--accent)', 'stroke-width': 2.5, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
+    ws.forEach((w, i) => {
+      const dot = add('circle', { cx: sx(xs[i]), cy: sy(w.kg), r: ws.length > 40 ? 2 : 4, fill: 'var(--card)', stroke: 'var(--accent)', 'stroke-width': 2 });
+      const title = document.createElementNS(ns, 'title');
+      title.textContent = fmtDate(w.date) + ': ' + fmt(w.kg, 1) + ' kg';
+      dot.appendChild(title);
+    });
+    box.replaceChildren(svg);
+  }
+
+  function renderWorkouts() {
+    const list = $('workout-list');
+    const ws = [...state.workouts].sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id)).slice(0, 30);
+    list.replaceChildren();
+    if (!ws.length) list.appendChild(el('li', { class: 'empty', text: 'Noch kein Training eingetragen. Los geht\'s!' }));
+    ws.forEach((w) => {
+      list.appendChild(el('li', null, [
+        el('div', { class: 'grow' }, [
+          el('div', { class: 'title', text: w.type }),
+          el('div', { class: 'muted', text: fmtDate(w.date) + ' · ' + w.min + ' Min.' })
+        ]),
+        el('span', { class: 'pill', text: fmt(w.kcal) + ' kcal' }),
+        el('button', { class: 'icon', 'aria-label': 'Löschen', text: '✕', onclick: () => { state.workouts = state.workouts.filter((x) => x.id !== w.id); save(); } })
+      ]));
+    });
+    const mon = dateKey(mondayOf(new Date()));
+    const week = state.workouts.filter((w) => w.date >= mon && w.date <= today());
+    const mins = week.reduce((s, w) => s + w.min, 0);
+    $('t-week-count').textContent = week.length;
+    $('t-week-min').textContent = fmt(mins);
+    $('t-week-kcal').textContent = fmt(week.reduce((s, w) => s + w.kcal, 0));
+    $('t-week-bar').style.width = clamp(mins / 150 * 100, 0, 100) + '%';
+    updateEstimate();
+  }
+
+  function updateEstimate() {
+    const met = Number($('t-type').value);
+    const min = Number($('t-min').value);
+    $('t-est').value = min > 0 ? '≈ ' + fmt(workoutKcal(met, min, currentWeight())) + ' kcal' : '–';
+  }
+
+  function renderFood() {
+    const t = today();
+    const c = calc();
+    const items = state.foods.filter((f) => f.date === t);
+    const list = $('food-list');
+    list.replaceChildren();
+    if (!items.length) list.appendChild(el('li', { class: 'empty', text: 'Heute noch nichts eingetragen.' }));
+    ['Frühstück', 'Mittagessen', 'Abendessen', 'Snack'].forEach((meal) => {
+      items.filter((f) => f.meal === meal).forEach((f) => {
+        list.appendChild(el('li', null, [
+          el('div', { class: 'grow' }, [
+            el('div', { class: 'title', text: f.name }),
+            el('div', { class: 'muted', text: meal + (f.protein ? ' · ' + f.protein + ' g Eiweiß' : '') })
+          ]),
+          el('span', { class: 'num', text: fmt(f.kcal) + ' kcal' }),
+          el('button', { class: 'icon', 'aria-label': 'Löschen', text: '✕', onclick: () => { state.foods = state.foods.filter((x) => x.id !== f.id); save(); } })
+        ]));
+      });
+    });
+    const total = items.reduce((s, f) => s + f.kcal, 0);
+    const prot = items.reduce((s, f) => s + (f.protein || 0), 0);
+    $('f-total').textContent = fmt(total);
+    $('f-total-sub').textContent = c ? 'von ' + fmt(c.target) + ' kcal' : '';
+    $('f-protein-total').textContent = fmt(prot) + ' g';
+    $('f-protein-sub').textContent = c ? 'von ' + c.protein + ' g' : '';
+
+    const glasses = state.water[t] || 0;
+    const goal = c ? c.water / 250 : 8;
+    const shown = Math.max(goal, glasses + 1, 8);
+    const water = $('water');
+    water.replaceChildren();
+    for (let i = 0; i < shown; i++) {
+      water.appendChild(el('button', {
+        class: 'glass' + (i < glasses ? ' full' : ''),
+        'aria-label': (i + 1) + ' Gläser',
+        onclick: () => { state.water[t] = (i + 1 === glasses) ? i : i + 1; save(); }
+      }));
+    }
+    $('water-text').textContent = fmt(glasses * 0.25, 2) + ' l von ' + fmt(goal * 0.25, 1) + ' l' + (glasses >= goal ? ' – super, Ziel erreicht! 💧' : '');
+  }
+
+  function renderPlan() {
+    const level = state.plan.level;
+    const plan = PLANS[level];
+    const mon = mondayOf(new Date());
+    const weekKey = dateKey(mon);
+    const done = state.plan.done[weekKey] || [];
+    const seg = $('plan-level');
+    seg.replaceChildren();
+    Object.keys(PLANS).forEach((k) => {
+      seg.appendChild(el('button', {
+        class: 'secondary' + (k === level ? ' on' : ''), type: 'button', text: PLANS[k].label,
+        onclick: () => { state.plan.level = k; save(); }
+      }));
+    });
+    const box = $('plan-days');
+    box.replaceChildren(el('h2', { text: 'Woche ab ' + mon.toLocaleDateString('de-DE', { day: '2-digit', month: 'long' }) }));
+    const todayIdx = (new Date().getDay() + 6) % 7;
+    const names = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+    plan.days.forEach((d, i) => {
+      const isDone = done.includes(i);
+      const cb = el('input', { type: 'checkbox', id: 'plan-' + i, 'aria-label': names[i] + ' erledigt' });
+      cb.checked = isDone;
+      cb.addEventListener('change', () => {
+        const set = new Set(state.plan.done[weekKey] || []);
+        cb.checked ? set.add(i) : set.delete(i);
+        state.plan.done[weekKey] = [...set];
+        save();
+      });
+      box.appendChild(el('div', { class: 'day' + (isDone ? ' done' : '') + (i === todayIdx ? ' today' : '') }, [
+        el('div', { class: 'day-head' }, [
+          cb,
+          el('label', { for: 'plan-' + i, class: 'grow', style: 'margin:0;color:var(--text);font-size:1rem' }, [
+            el('strong', { class: 'day-title', text: names[i] + ': ' + d[0] })
+          ]),
+          i === todayIdx ? el('span', { class: 'pill blue', text: 'Heute' }) : null
+        ]),
+        el('ul', null, d[1].map((x) => el('li', { text: x })))
+      ]));
+    });
+    $('plan-progress').textContent = done.length + ' von 7 Tagen geschafft';
+    $('plan-bar').style.width = (done.length / 7 * 100) + '%';
+  }
+
+  function renderProfile() {
+    const p = state.profile;
+    const c = calc();
+    $('calc-card').hidden = !c;
+    if (!c) return;
+    $('c-bmr').textContent = fmt(c.bmr);
+    $('c-tdee').textContent = fmt(c.tdee);
+    $('c-target').textContent = fmt(c.target);
+    $('c-protein').textContent = c.protein;
+    $('c-explain').textContent = 'Berechnet mit der Mifflin-St-Jeor-Formel auf Basis deines aktuellen Gewichts (' + fmt(c.w, 1) +
+      ' kg). Bei ' + fmt(c.deficit) + ' kcal Defizit pro Tag verlierst du rund ' + fmt(c.deficit * 7 / KCAL_PER_KG, 2) + ' kg pro Woche.';
+    const warn = $('c-warn');
+    const msgs = [];
+    if (c.capped) msgs.push('Dein Tagesziel wurde auf ' + c.minKcal + ' kcal angehoben – weniger sollte man ohne ärztliche Begleitung nicht essen.');
+    if (p.goal >= c.w) msgs.push('Dein Wunschgewicht liegt nicht unter deinem aktuellen Gewicht.');
+    const goalBmi = p.goal / Math.pow(p.height / 100, 2);
+    if (goalBmi < 18.5) msgs.push('Dein Wunschgewicht entspricht einem BMI von ' + fmt(goalBmi, 1) + ' (Untergewicht). Überlege, ein höheres Ziel zu wählen.');
+    warn.hidden = !msgs.length;
+    warn.textContent = msgs.join(' ');
+  }
+
+  function fillProfileForm() {
+    const p = state.profile;
+    if (!p) return;
+    $('p-name').value = p.name || '';
+    $('p-sex').value = p.sex;
+    $('p-age').value = p.age;
+    $('p-height').value = p.height;
+    $('p-start').value = p.start;
+    $('p-goal').value = p.goal;
+    $('p-activity').value = String(p.activity);
+    $('p-pace').value = String(p.pace);
+  }
+
+  // ---------- Navigation ----------
+  function showTab(name) {
+    document.querySelectorAll('section.tab').forEach((s) => s.classList.toggle('active', s.id === 'tab-' + name));
+    document.querySelectorAll('nav.tabs button').forEach((b) => b.classList.toggle('active', b.dataset.tab === name));
+    window.scrollTo(0, 0);
+    try { sessionStorage.setItem('fit-leicht-tab', name); } catch (e) { /* ignorieren */ }
+  }
+  document.querySelectorAll('nav.tabs button').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  document.querySelectorAll('[data-goto]').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.goto)));
+
+  // ---------- Formulare ----------
+  ACTIVITIES.forEach(([name, met]) => $('t-type').appendChild(el('option', { value: met, text: name })));
+  $('t-type').addEventListener('change', updateEstimate);
+  $('t-min').addEventListener('input', updateEstimate);
+
+  QUICK_FOODS.forEach(([name, kcal, protein]) => {
+    $('quick-foods').appendChild(el('button', {
+      class: 'secondary', type: 'button', text: name + ' · ' + kcal,
+      onclick: () => {
+        state.foods.push({ id: uid(), date: today(), name, kcal, protein, meal: $('f-meal').value });
+        save();
+      }
+    }));
+  });
+
+  $('weight-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const date = $('w-date').value;
+    const kg = Number($('w-value').value);
+    if (!date || !(kg > 0)) return;
+    state.weights = state.weights.filter((w) => w.date !== date); // ein Eintrag pro Tag
+    state.weights.push({ id: uid(), date, kg });
+    $('w-value').value = '';
+    save();
+  });
+
+  $('workout-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const sel = $('t-type');
+    const min = Number($('t-min').value);
+    if (!(min > 0)) return;
+    const met = Number(sel.value);
+    state.workouts.push({
+      id: uid(), date: $('t-date').value || today(),
+      type: sel.options[sel.selectedIndex].text, min,
+      kcal: workoutKcal(met, min, currentWeight())
+    });
+    $('t-min').value = '';
+    save();
+  });
+
+  $('food-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = $('f-name').value.trim();
+    const kcal = Number($('f-kcal').value);
+    if (!name) return;
+    state.foods.push({ id: uid(), date: today(), name, kcal, protein: Number($('f-protein').value) || 0, meal: $('f-meal').value });
+    $('f-name').value = ''; $('f-kcal').value = ''; $('f-protein').value = '';
+    save();
+  });
+
+  $('profile-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const isNew = !state.profile;
+    state.profile = {
+      name: $('p-name').value.trim(),
+      sex: $('p-sex').value,
+      age: Number($('p-age').value),
+      height: Number($('p-height').value),
+      start: Number($('p-start').value),
+      goal: Number($('p-goal').value),
+      activity: Number($('p-activity').value),
+      pace: Number($('p-pace').value)
+    };
+    if (isNew && !state.weights.length) state.weights.push({ id: uid(), date: today(), kg: state.profile.start });
+    save();
+    if (isNew) showTab('home');
+  });
+
+  // ---------- Backup ----------
+  $('export-btn').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+    const a = el('a', { href: URL.createObjectURL(blob), download: 'fit-leicht-backup-' + today() + '.json' });
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+  $('import-btn').addEventListener('click', () => $('import-file').click());
+  $('import-file').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    file.text().then((txt) => {
+      const data = JSON.parse(txt);
+      if (!data || !Array.isArray(data.weights)) throw new Error('format');
+      state = Object.assign(emptyState(), data);
+      fillProfileForm();
+      save();
+      alert('Backup geladen.');
+    }).catch(() => alert('Die Datei konnte nicht gelesen werden.'));
+    e.target.value = '';
+  });
+  $('reset-btn').addEventListener('click', () => {
+    if (!confirm('Wirklich alle Daten löschen? Das kann nicht rückgängig gemacht werden.')) return;
+    state = emptyState();
+    document.querySelectorAll('form').forEach((f) => f.reset());
+    setDefaults();
+    save();
+  });
+
+  function setDefaults() {
+    $('w-date').value = today();
+    $('t-date').value = today();
+  }
+
+  // ---------- Start ----------
+  load();
+  setDefaults();
+  fillProfileForm();
+  render();
+  try {
+    const t = sessionStorage.getItem('fit-leicht-tab');
+    if (t && $('tab-' + t)) showTab(t);
+  } catch (e) { /* ignorieren */ }
+})();
+</script>
+</body>
+</html>
